@@ -2,7 +2,6 @@ import { MemoryRouter } from 'react-router-dom';
 import { test, expect } from 'vitest';
 import App from '~/components/App/App';
 import { server } from '~/mocks/server';
-// import { rest } from "msw";
 import { http, HttpResponse } from 'msw';
 import API_PATHS from '~/constants/apiPaths';
 import { CartItem } from '~/models/CartItem';
@@ -29,19 +28,9 @@ test('Renders products list', async () => {
     },
   ];
   server.use(
-    // rest.get(`${API_PATHS.bff}/product/available`, (req, res, ctx) => {
-    //   return res(
-    //     ctx.status(200),
-    //     ctx.delay(),
-    //     ctx.json<AvailableProduct[]>(products),
-    //   );
-    // }),
     http.get(`${API_PATHS.bff}/product/available`, () => {
       return HttpResponse.json(products, { status: 200 });
     }),
-    // rest.get(`${API_PATHS.cart}/profile/cart`, (req, res, ctx) => {
-    //   return res(ctx.status(200), ctx.json<CartItem[]>([]));
-    // }),
     http.get(`${API_PATHS.cart}/profile/cart`, () => {
       return HttpResponse.json<CartItem[]>([], { status: 200 });
     }),

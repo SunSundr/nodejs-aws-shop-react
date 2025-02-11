@@ -19,7 +19,6 @@ export default function Products() {
     <Grid container spacing={4}>
       {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
       {data.map(({ count, ...product }, index) => (
-        // <Grid item key={product.id} xs={12} sm={6} md={4}>
         <Grid key={product.id} size={{ xs: 12, sm: 6, md: 4 }}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <CardMedia

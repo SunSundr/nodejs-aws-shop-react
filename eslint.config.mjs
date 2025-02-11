@@ -18,6 +18,8 @@ export default tseslint.config(
       react,
       '@typescript-eslint': tseslint.plugin,
     },
-    rules: {},
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    },
   },
 );

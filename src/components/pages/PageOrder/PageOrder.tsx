@@ -31,24 +31,6 @@ type FormValues = {
 
 export default function PageOrder() {
   const { id } = useParams<{ id: string }>();
-  // const results = useQueries([
-  //   {
-  //     queryKey: ["order", { id }],
-  //     queryFn: async () => {
-  //       const res = await axios.get<Order>(`${API_PATHS.order}/order/${id}`);
-  //       return res.data;
-  //     },
-  //   },
-  //   {
-  //     queryKey: "products",
-  //     queryFn: async () => {
-  //       const res = await axios.get<AvailableProduct[]>(
-  //         `${API_PATHS.bff}/product/available`
-  //       );
-  //       return res.data;
-  //     },
-  //   },
-  // ]);
   const results = useQueries({
     queries: [
       {

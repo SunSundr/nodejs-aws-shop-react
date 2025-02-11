@@ -1,4 +1,4 @@
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -25,13 +25,13 @@ const AddressForm = ({ initialValues, onBack, onSubmit }: AddressFormProps) => {
           Shipping address
         </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Field component={TextField} name="lastName" label="Last Name" fullWidth />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Field component={TextField} name="firstName" label="First Name" fullWidth />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Field
               component={TextField}
               name="address"
@@ -40,7 +40,7 @@ const AddressForm = ({ initialValues, onBack, onSubmit }: AddressFormProps) => {
               multiline
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Field component={TextField} name="comment" label="Comment" fullWidth multiline />
           </Grid>
         </Grid>

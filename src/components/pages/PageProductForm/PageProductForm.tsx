@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import { AvailableProduct, AvailableProductSchema } from '~/models/Product';
 import { Formik, Field, FormikProps, Form } from 'formik';
 import TextField from '~/components/Form/TextField';
@@ -55,7 +55,7 @@ export default function PageProductForm() {
           {({ dirty, isSubmitting }: FormikProps<AvailableProduct>) => (
             <Form autoComplete="off">
               <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Field
                     component={TextField}
                     name="title"
@@ -65,7 +65,7 @@ export default function PageProductForm() {
                     required
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Field
                     component={TextField}
                     name="description"
@@ -76,7 +76,7 @@ export default function PageProductForm() {
                     required
                   />
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid size={{ xs: 12, sm: 4 }}>
                   <Field
                     component={TextField}
                     name="price"
@@ -86,7 +86,7 @@ export default function PageProductForm() {
                     required
                   />
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid size={{ xs: 12, sm: 4 }}>
                   <Field
                     component={TextField}
                     name="count"
@@ -96,7 +96,7 @@ export default function PageProductForm() {
                     required
                   />
                 </Grid>
-                <Grid item container xs={12} justifyContent="space-between">
+                <Grid container size={{ xs: 12 }} justifyContent="space-between">
                   <Button color="primary" onClick={() => navigate('/admin/products')}>
                     Cancel
                   </Button>
