@@ -2,9 +2,12 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import "@testing-library/jest-dom";
-import { server } from "~/mocks/server";
 
-beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+//import "@testing-library/jest-dom";
+import '@testing-library/jest-dom/vitest';
+import { beforeAll, afterAll, afterEach } from 'vitest';
+import { server } from '~/mocks/server';
+
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 afterAll(() => server.close());
 afterEach(() => server.resetHandlers());

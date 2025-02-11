@@ -1,14 +1,14 @@
-import React from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
-import Cart from "~/components/MainLayout/components/Cart";
-import { Link as RouterLink } from "react-router-dom";
-import Link from "@mui/material/Link";
+import React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import Cart from '~/components/MainLayout/components/Cart';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@mui/material/Link';
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -27,12 +27,7 @@ export default function Header() {
     <AppBar position="relative">
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          <Link
-            component={RouterLink}
-            sx={{ color: "inherit" }}
-            underline="none"
-            to="/"
-          >
+          <Link component={RouterLink} sx={{ color: 'inherit' }} underline="none" to="/">
             My Store!
           </Link>
         </Typography>
@@ -53,29 +48,21 @@ export default function Header() {
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right',
               }}
               keepMounted
               transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right',
               }}
               open={open}
               onClose={handleClose}
             >
-              <MenuItem
-                component={RouterLink}
-                to="/admin/orders"
-                onClick={handleClose}
-              >
+              <MenuItem component={RouterLink} to="/admin/orders" onClick={handleClose}>
                 Manage orders
               </MenuItem>
-              <MenuItem
-                component={RouterLink}
-                to="/admin/products"
-                onClick={handleClose}
-              >
+              <MenuItem component={RouterLink} to="/admin/products" onClick={handleClose}>
                 Manage products
               </MenuItem>
             </Menu>
