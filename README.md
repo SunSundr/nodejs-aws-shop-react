@@ -1,5 +1,4 @@
 # React-shop-cloudfront
-
 This is frontend starter project for nodejs-aws mentoring program. It uses the following technologies:
 
 - [Vite](https://vitejs.dev/) as a project bundler
@@ -14,6 +13,8 @@ This is frontend starter project for nodejs-aws mentoring program. It uses the f
 - [Eslint](https://eslint.org/) as a code linting tool
 - [Prettier](https://prettier.io/) as a code formatting tool
 - [TypeScript](https://www.typescriptlang.org/) as a type checking tool
+
+***Project updated as of February 2025. All dependencies have been upgraded to their latest versions, and code adjustments have been made to ensure compatibility.***
 
 ## Available Scripts
 

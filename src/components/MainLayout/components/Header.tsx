@@ -9,6 +9,7 @@ import Menu from '@mui/material/Menu';
 import Cart from '~/components/MainLayout/components/Cart';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@mui/material/Link';
+import { STORE_NAME } from '~/constants/common';
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -28,7 +29,7 @@ export default function Header() {
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           <Link component={RouterLink} sx={{ color: 'inherit' }} underline="none" to="/">
-            SunSundr★Store
+            {STORE_NAME}
           </Link>
         </Typography>
 

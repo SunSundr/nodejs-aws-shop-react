@@ -4,6 +4,7 @@ import Link from '@mui/material/Link';
 import Container from '@mui/material/Container';
 import Header from '~/components/MainLayout/components/Header';
 import Box from '@mui/material/Box';
+import { STORE_NAME } from '~/constants/common';
 
 function Copyright() {
   return (
@@ -25,6 +26,7 @@ function Copyright() {
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <>
+      <title>{STORE_NAME.replace(/[^a-zA-Z]+/g, ' ')}</title>
       <Header />
       <main>
         <Container sx={{ pb: 8 }} maxWidth="md">

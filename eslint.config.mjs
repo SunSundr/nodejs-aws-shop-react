@@ -14,12 +14,13 @@ export default tseslint.config(
       eslintPluginPrettierRecommended,
     ],
     plugins: {
-      prettier,
-      react,
       '@typescript-eslint': tseslint.plugin,
+      react,
+      prettier,
     },
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/explicit-function-return-type': 'off',
     },
   },
 );
