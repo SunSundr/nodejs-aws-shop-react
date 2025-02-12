@@ -5,40 +5,40 @@ import { AvailableProduct, Product } from '~/models/Product';
 
 export const products: Product[] = [
   {
-    description: 'Short Product Description1',
+    description: 'Experience the ultimate power in a tiny package',
     id: '7567ec4b-b10c-48c5-9345-fc73c48a80aa',
     price: 24,
-    title: 'ProductOne',
+    title: 'Super Product',
   },
   {
-    description: 'Short Product Description7',
+    description: 'Add a dash of fun and whimsy to your day',
     id: '7567ec4b-b10c-48c5-9345-fc73c48a80a1',
     price: 15,
-    title: 'ProductTitle',
+    title: 'Quirky Product',
   },
   {
-    description: 'Short Product Description2',
+    description: 'Unleash your inner groove with this vibrant item',
     id: '7567ec4b-b10c-48c5-9345-fc73c48a80a3',
     price: 23,
-    title: 'Product',
+    title: 'Funky Product',
   },
   {
-    description: 'Short Product Description4',
+    description: 'Elegance and charm wrapped in a stylish bundle',
     id: '7567ec4b-b10c-48c5-9345-fc73348a80a1',
     price: 15,
-    title: 'ProductTest',
+    title: 'Dandy Product',
   },
   {
-    description: 'Short Product Descriptio1',
+    description: 'Your new go-to gadget for everyday convenience',
     id: '7567ec4b-b10c-48c5-9445-fc73c48a80a2',
     price: 23,
-    title: 'Product2',
+    title: 'Nifty Product',
   },
   {
-    description: 'Short Product Description7',
+    description: 'Bring a touch of wild and crazy fun into your life',
     id: '7567ec4b-b10c-45c5-9345-fc73c48a80a1',
     price: 15,
-    title: 'ProductName',
+    title: 'Zany Product',
   },
 ];
 
@@ -49,21 +49,11 @@ export const availableProducts: AvailableProduct[] = products.map((product, inde
 
 export const cart: CartItem[] = [
   {
-    product: {
-      description: 'Short Product Description1',
-      id: '7567ec4b-b10c-48c5-9345-fc73c48a80aa',
-      price: 24,
-      title: 'ProductOne',
-    },
+    product: products[0],
     count: 2,
   },
   {
-    product: {
-      description: 'Short Product Description7',
-      id: '7567ec4b-b10c-45c5-9345-fc73c48a80a1',
-      price: 15,
-      title: 'ProductName',
-    },
+    product: products[5],
     count: 5,
   },
 ];
@@ -78,8 +68,8 @@ export const orders: Order[] = [
       comment: '',
     },
     items: [
-      { productId: '7567ec4b-b10c-48c5-9345-fc73c48a80aa', count: 2 },
-      { productId: '7567ec4b-b10c-45c5-9345-fc73c48a80a1', count: 5 },
+      { productId: products[0].id ?? 'error', count: 2 },
+      { productId: products[5].id ?? 'error', count: 5 },
     ],
     statusHistory: [{ status: OrderStatus.Open, timestamp: Date.now(), comment: 'New order' }],
   },
@@ -91,7 +81,7 @@ export const orders: Order[] = [
       lastName: 'Doe',
       comment: 'Ship fast!',
     },
-    items: [{ productId: '7567ec4b-b10c-48c5-9345-fc73c48a80aa', count: 3 }],
+    items: [{ productId: products[0].id ?? 'error', count: 3 }],
     statusHistory: [
       {
         status: OrderStatus.Sent,

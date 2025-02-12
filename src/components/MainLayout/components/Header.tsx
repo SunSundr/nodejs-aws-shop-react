@@ -28,7 +28,7 @@ export default function Header() {
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           <Link component={RouterLink} sx={{ color: 'inherit' }} underline="none" to="/">
-            My Store!
+            SunSundr★Store
           </Link>
         </Typography>
 
