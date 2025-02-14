@@ -11,7 +11,7 @@ export class AwsDeployStack extends cdk.Stack {
 
     const siteBucket = new s3.Bucket(this, 'SiteBucket', {
       bucketName: 'cdk-rss-bucket',
-      //websiteIndexDocument: "index.html",
+      // websiteIndexDocument: "index.html",
       // versioned: false,
       // publicReadAccess: false,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
