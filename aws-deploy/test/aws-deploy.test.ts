@@ -1,17 +1,19 @@
-// import * as cdk from 'aws-cdk-lib';
-// import { Template } from 'aws-cdk-lib/assertions';
-// import * as AwsDeploy from '../lib/aws-deploy-stack';
+import { Template } from 'aws-cdk-lib/assertions';
+import * as cdk from 'aws-cdk-lib';
+import { AwsDeployStack } from '../lib/aws-deploy-stack';
 
-// example test. To run these tests, uncomment this file along with the
-// example resource in lib/aws-deploy-stack.ts
-test('SQS Queue Created', () => {
-//   const app = new cdk.App();
-//     // WHEN
-//   const stack = new AwsDeploy.AwsDeployStack(app, 'MyTestStack');
-//     // THEN
-//   const template = Template.fromStack(stack);
+test('S3 Bucket Created', () => {
+  const app = new cdk.App();
+  const stack = new AwsDeployStack(app, 'MyTestStack');
+  const template = Template.fromStack(stack);
 
-//   template.hasResourceProperties('AWS::SQS::Queue', {
-//     VisibilityTimeout: 300
-//   });
+  template.hasResourceProperties('AWS::S3::Bucket', {
+    BucketName: 'cdk-rss-bucket',
+  });
+
+  template.hasResourceProperties('AWS::CloudFront::Distribution', {
+    DistributionConfig: {
+      DefaultRootObject: 'index.html',
+    },
+  });
 });
