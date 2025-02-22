@@ -1,38 +1,39 @@
-# React-shop-cloudfront
+# React Shop with CloudFront Deployment
 
-This is frontend starter project for nodejs-aws mentoring program. It uses the following technologies:
+This repository contains two interconnected projects: a React-based frontend application and an AWS CDK application for deploying the frontend to AWS with CloudFront.
 
-- [Vite](https://vitejs.dev/) as a project bundler
-- [React](https://beta.reactjs.org/) as a frontend framework
-- [React-router-dom](https://reactrouterdotcom.fly.dev/) as a routing library
-- [MUI](https://mui.com/) as a UI framework
-- [React-query](https://react-query-v3.tanstack.com/) as a data fetching library
-- [Formik](https://formik.org/) as a form library
-- [Yup](https://github.com/jquense/yup) as a validation schema
-- [Vitest](https://vitest.dev/) as a test runner
-- [MSW](https://mswjs.io/) as an API mocking library
-- [Eslint](https://eslint.org/) as a code linting tool
-- [Prettier](https://prettier.io/) as a code formatting tool
-- [TypeScript](https://www.typescriptlang.org/) as a type checking tool
+## Project Structure
 
-## Available Scripts
+The repository is organized as follows:
 
-### `start`
+```
+├── aws-deploy/     # AWS Deployment App (CDK)
+├── frontend/       # React Frontend (React-shop-cloudfront)
+└── README.md       # This main README file
+```
 
-Starts the project in dev mode with mocked API on local environment.
+## Project Details
 
-### `build`
+### 1. Frontend: React Shop (React-shop-cloudfront)
 
-Builds the project for production in `dist` folder.
+***Project updated as of February 2025. All dependencies have been upgraded to their latest versions, and code adjustments have been made to ensure compatibility.***
 
-### `preview`
+*   **Description:** The frontend portion of the website, built using React. This project handles the user interface and client-side logic.
+*   **Technology Stack:** React, JavaScript/TypeScript (depending on your setup), potentially other frontend libraries/frameworks.
+*   **[➡️  Click here for the Frontend README](frontend/README.md)**
 
-Starts the project in production mode on local environment.
+### 2. AWS Deployment App
 
-### `test`, `test:ui`, `test:coverage`
+*   **Description:** An AWS CDK application written in Node.js and TypeScript, responsible for deploying the frontend to AWS using CloudFront.
+*   **Technology Stack:** AWS CDK, Node.js, TypeScript, CloudFront, S3 (and other AWS services you utilize).
+*   **[➡️  Click here for the AWS Deployment App README](aws-deploy/README.md)**
+  
+#### **Automated Deployment (AWS CDK)**
 
-Runs tests in console, in browser or with coverage.
+**Bucket URL:** https://cdk-rss-bucket.s3.eu-north-1.amazonaws.com (Expected 403 Access Denied)
 
-### `lint`, `prettier`
+**CloudFrontURL:** https://db5i175ksp8cp.cloudfront.net
 
-Runs linting and formatting for all files in `src` folder.
+## Getting Started
+
+To get started with either project, please refer to their individual README files linked above. Each README provides detailed instructions on installation, configuration, and usage.
