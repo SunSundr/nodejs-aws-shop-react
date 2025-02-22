@@ -28,7 +28,7 @@ test('Renders products list', async () => {
     },
   ];
   server.use(
-    http.get(`${API_PATHS.bff}/product/available`, () => {
+    http.get(`${API_PATHS.bff}/products`, () => {
       return HttpResponse.json(products, { status: 200 });
     }),
     http.get(`${API_PATHS.cart}/profile/cart`, () => {
