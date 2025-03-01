@@ -21,7 +21,7 @@ export default function PageProductForm() {
   const invalidateAvailableProducts = useInvalidateAvailableProducts();
   const removeProductCache = useRemoveProductCache();
   const { data, isLoading } = useAvailableProduct(id);
-  const { mutateAsync: upsertAvailableProduct } = useUpsertAvailableProduct();
+  const { mutateAsync: upsertAvailableProduct } = useUpsertAvailableProduct(id);
   const onSubmit = (values: AvailableProduct) => {
     const formattedValues = AvailableProductSchema.cast(values);
     const productToSave = id
@@ -42,7 +42,7 @@ export default function PageProductForm() {
   return (
     <PaperLayout>
       <Typography component="h1" variant="h4" align="center" mb={2}>
-        {id ? 'Edit product' : 'Create new product'}
+        {id ? 'Edit Product' : 'Create New Product'}
       </Typography>
       {isLoading ? (
         <>Loading...</>
@@ -74,6 +74,16 @@ export default function PageProductForm() {
                     autoComplete="off"
                     multiline
                     required
+                  />
+                </Grid>
+                <Grid size={{ xs: 12 }}>
+                  <Field
+                    component={TextField}
+                    name="imageURL"
+                    label="Image URL"
+                    fullWidth
+                    autoComplete="off"
+                    multiline
                   />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 4 }}>

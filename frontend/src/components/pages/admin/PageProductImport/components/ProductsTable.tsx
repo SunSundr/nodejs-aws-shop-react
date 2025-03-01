@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import { formatAsPrice } from '~/utils/utils';
+import { formatAsPrice, sortProductsById } from '~/utils/utils';
 import {
   useAvailableProducts,
   useDeleteAvailableProduct,
@@ -32,7 +32,7 @@ export default function ProductsTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((product) => (
+          {sortProductsById(data).map((product) => (
             <TableRow key={product.id}>
               <TableCell component="th" scope="row">
                 {product.title}
