@@ -1,9 +1,10 @@
-import Typography from '@mui/material/Typography';
-import { Product } from '~/models/Product';
-import CartIcon from '@mui/icons-material/ShoppingCart';
 import Add from '@mui/icons-material/Add';
 import Remove from '@mui/icons-material/Remove';
+import CartIcon from '@mui/icons-material/ShoppingCart';
+import { Box } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { Product } from '~/models/Product';
 import { useCart, useInvalidateCart, useUpsertCart } from '~/queries/cart';
 
 type AddProductToCartProps = {
@@ -30,7 +31,7 @@ export default function AddProductToCart({ product }: AddProductToCartProps) {
   };
 
   return cartItem ? (
-    <>
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.8 }}>
       <IconButton disabled={isFetching} onClick={removeProduct} size="large">
         <Remove color={'secondary'} />
       </IconButton>
@@ -38,7 +39,7 @@ export default function AddProductToCart({ product }: AddProductToCartProps) {
       <IconButton disabled={isFetching} onClick={addProduct} size="large">
         <Add color={'secondary'} />
       </IconButton>
-    </>
+    </Box>
   ) : (
     <IconButton disabled={isFetching} onClick={addProduct} size="large">
       <CartIcon color={'secondary'} />

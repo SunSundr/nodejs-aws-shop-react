@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import API_PATHS from '~/constants/apiPaths';
 // import { availableProducts, orders, products, cart } from '~/mocks/data';
-import { availableProducts, orders, cart } from '~/mocks/data';
+import { availableProducts, cart, orders } from '~/mocks/data';
 
 export const handlers = [
   // not used ?
