@@ -25,27 +25,33 @@ export default function CSVFileImport({ url }: CSVFileImportProps) {
 
   const uploadFile = async () => {
     if (!file) {
-      console.log('Error: File is missing');
+      console.error('Error: File is missing');
       return;
     }
-    console.log('Get the presigned URL');
-    const response = await axios({
-      method: 'GET',
-      url,
-      params: {
-        name: encodeURIComponent(file.name),
-      },
-    });
-    console.log('File to upload: ', file.name);
-    console.log('Uploading to: ', response.data);
-    const result = await fetch(response.data, {
-      method: 'PUT',
-      body: file,
-    });
-    if (result.ok) {
-      console.log('Uploaded successfully!');
+    try {
+      console.log('Get the presigned URL');
+      const response = await axios({
+        method: 'GET',
+        url,
+        params: {
+          name: encodeURIComponent(file.name),
+        },
+      });
+      console.log('File to upload: ', file.name);
+      console.log('Uploading to: ', response.data);
+      const result = await fetch(response.data, {
+        method: 'PUT',
+        body: file,
+      });
+      if (result.ok) {
+        console.log('Result: ', result);
+        console.log('Uploaded successfully!');
+      }
+    } catch (error) {
+      console.error('There was an error uploading the file', error);
+    } finally {
+      setFile(undefined);
     }
-    setFile(undefined);
   };
 
   return (
