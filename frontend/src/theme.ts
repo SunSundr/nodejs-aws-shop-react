@@ -34,18 +34,18 @@ export const lightTheme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#56473c',
+      main: '#545a64',
     },
     secondary: {
       main: '#bb8653',
     },
     background: {
-      default: '#f9f9eb',
-      paper: '#ffffff',
+      default: '#fdf9f6',
+      paper: '#FFFFFF',
     },
     text: {
-      primary: '#3E2723',
-      secondary: '#6D4C41',
+      primary: '#2E3A47',
+      secondary: '#5C6B7A',
     },
   },
   components: {

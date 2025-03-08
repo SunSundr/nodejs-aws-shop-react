@@ -34,6 +34,7 @@ export function truncateDescription(text: string, maxLength = 140): string {
   const sentenceEndMatch = text.match(sentenceEndRegex);
 
   let truncatedText = text;
+  let ellipsis = false;
 
   if (sentenceEndMatch) {
     const firstSentenceEndIndex = sentenceEndMatch.index! + sentenceEndMatch[0].length;
@@ -47,9 +48,11 @@ export function truncateDescription(text: string, maxLength = 140): string {
 
     if (lastSentenceEndIndex !== -1) {
       truncatedText = truncatedText.slice(0, lastSentenceEndIndex + 1);
+    } else {
+      ellipsis = true;
     }
   }
 
   const formattedText = formatLastSpace(truncatedText);
-  return formattedText + (truncatedText.length < text.length ? '...' : '');
+  return formattedText + (ellipsis ? '...' : '');
 }
