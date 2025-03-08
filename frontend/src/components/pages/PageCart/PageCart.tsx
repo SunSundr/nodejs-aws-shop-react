@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import Stepper from '@mui/material/Stepper';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
+import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
+import AddressForm from '~/components/pages/PageCart/components/AddressForm';
 import ReviewCart from '~/components/pages/PageCart/components/ReviewCart';
 import ReviewOrder from '~/components/pages/PageCart/components/ReviewOrder';
 import PaperLayout from '~/components/PaperLayout/PaperLayout';
 import { Address, AddressSchema, Order } from '~/models/Order';
-import Box from '@mui/material/Box';
 import { useCart, useInvalidateCart } from '~/queries/cart';
-import AddressForm from '~/components/pages/PageCart/components/AddressForm';
 import { useSubmitOrder } from '~/queries/orders';
 
 enum CartStep {
@@ -100,9 +100,9 @@ export default function PageCart() {
       {activeStep === CartStep.ReviewOrder && <ReviewOrder address={address} items={data} />}
       {activeStep === CartStep.Success && <Success />}
       {!isCartEmpty && activeStep !== CartStep.Address && activeStep !== CartStep.Success && (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
           {activeStep !== CartStep.ReviewCart && (
-            <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+            <Button variant="outlined" onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
               Back
             </Button>
           )}

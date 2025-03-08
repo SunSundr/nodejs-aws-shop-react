@@ -1,6 +1,6 @@
 import React from 'react';
-import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material';
+import Paper from '@mui/material/Paper';
 import Box from '@mui/system/Box';
 
 const PaperLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -11,7 +11,7 @@ const PaperLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         width: 'auto',
         mx: 2,
         [theme.breakpoints.up('sm')]: {
-          width: 600,
+          width: 720,
           mx: 'auto',
         },
       }}
@@ -19,7 +19,7 @@ const PaperLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <Paper
         sx={{
           my: 3,
-          padding: 2,
+          padding: 20,
           [theme.breakpoints.up('sm')]: {
             my: 6,
             padding: 3,

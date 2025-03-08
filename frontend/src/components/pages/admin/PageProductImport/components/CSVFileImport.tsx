@@ -1,14 +1,13 @@
 import React, { useRef } from 'react';
-import Typography from '@mui/material/Typography';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
 type CSVFileImportProps = {
   url: string;
-  title: string;
 };
 
-export default function CSVFileImport({ url, title }: CSVFileImportProps) {
+export default function CSVFileImport({ url }: CSVFileImportProps) {
   const [file, setFile] = React.useState<File>();
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -25,30 +24,38 @@ export default function CSVFileImport({ url, title }: CSVFileImportProps) {
   };
 
   const uploadFile = async () => {
-    console.log('uploadFile to:', url);
-    setFile(undefined);
-    // Get the presigned URL
-    // const response = await axios({
-    //   method: "GET",
-    //   url,
-    //   params: {
-    //     name: encodeURIComponent(file.name),
-    //   },
-    // });
-    // console.log("File to upload: ", file.name);
-    // console.log("Uploading to: ", response.data);
-    // const result = await fetch(response.data, {
-    //   method: "PUT",
-    //   body: file,
-    // });
-    // console.log("Result: ", result);
-    // setFile("");
+    if (!file) {
+      console.error('Error: File is missing');
+      return;
+    }
+    try {
+      console.log('Get the presigned URL');
+      const response = await axios({
+        method: 'GET',
+        url,
+        params: {
+          name: encodeURIComponent(file.name),
+        },
+      });
+      console.log('File to upload: ', file.name);
+      console.log('Uploading to: ', response.data);
+      const result = await fetch(response.data, {
+        method: 'PUT',
+        body: file,
+      });
+      if (result.ok) {
+        console.log('Result: ', result);
+        console.log('Uploaded successfully!');
+      }
+    } catch (error) {
+      console.error('There was an error uploading the file', error);
+    } finally {
+      setFile(undefined);
+    }
   };
+
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>
-        {title}
-      </Typography>
       {!file ? (
         <>
           <input
@@ -63,16 +70,29 @@ export default function CSVFileImport({ url, title }: CSVFileImportProps) {
             color="primary"
             variant="contained"
             onClick={() => uploadInputRef.current && uploadInputRef.current.click()}
+            sx={{ pb: 0 }}
           >
-            Select File
+            Import CSV File
           </Button>
         </>
       ) : (
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <Button size="small" color="warning" variant="contained" onClick={removeFile}>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <Button
+            size="small"
+            color="warning"
+            variant="contained"
+            onClick={removeFile}
+            sx={{ pb: 0 }}
+          >
             Remove file
           </Button>
-          <Button size="small" color="primary" variant="contained" onClick={uploadFile}>
+          <Button
+            size="small"
+            color="secondary"
+            variant="contained"
+            onClick={uploadFile}
+            sx={{ pb: 0 }}
+          >
             Upload file
           </Button>
         </div>

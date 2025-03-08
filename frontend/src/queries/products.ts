@@ -1,8 +1,8 @@
+import React from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import API_PATHS from '~/constants/apiPaths';
 import { AvailableProduct } from '~/models/Product';
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import React from 'react';
 
 export function useAvailableProducts() {
   return useQuery<AvailableProduct[], AxiosError>({
@@ -61,17 +61,6 @@ export function useUpsertAvailableProduct(id?: string) {
   });
 }
 
-export function useUpsertAvailableProductOLD() {
-  return useMutation({
-    mutationFn: async (values: AvailableProduct) =>
-      axios.put<AvailableProduct>(`${API_PATHS.bff}/products`, values, {
-        headers: {
-          Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
-        },
-      }),
-  });
-}
-
 export function useDeleteAvailableProduct() {
   return useMutation({
     mutationFn: async (id: string) =>
@@ -81,4 +70,20 @@ export function useDeleteAvailableProduct() {
         },
       }),
   });
+}
+
+export function getErrorMessage(error: AxiosError | null) {
+  if (!error) return undefined;
+  const data = error?.response?.data;
+  if (data) {
+    if (typeof data === 'object' && 'message' in data) {
+      return data.message as string;
+    } else if (typeof data === 'string') {
+      return data;
+    }
+  } else if (error.message) {
+    return error.message;
+  } else {
+    return 'Unknown error';
+  }
 }
