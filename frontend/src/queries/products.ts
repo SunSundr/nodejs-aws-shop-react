@@ -45,7 +45,23 @@ export function useRemoveProductCache() {
   );
 }
 
-export function useUpsertAvailableProduct() {
+export function useUpsertAvailableProduct(id?: string) {
+  return useMutation({
+    mutationFn: async (values: AvailableProduct) => {
+      const path = `${API_PATHS.bff}/products`;
+      const config = {
+        headers: {
+          Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
+        },
+      };
+      return id
+        ? axios.put<AvailableProduct>(path, values, config)
+        : axios.post<AvailableProduct>(path, values, config);
+    },
+  });
+}
+
+export function useUpsertAvailableProductOLD() {
   return useMutation({
     mutationFn: async (values: AvailableProduct) =>
       axios.put<AvailableProduct>(`${API_PATHS.bff}/products`, values, {

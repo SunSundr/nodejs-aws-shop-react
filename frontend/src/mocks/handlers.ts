@@ -19,6 +19,9 @@ export const handlers = [
   http.put(`${API_PATHS.bff}/products`, () => {
     return HttpResponse.json(null, { status: 200 });
   }),
+  http.post(`${API_PATHS.bff}/products`, () => {
+    return HttpResponse.json(null, { status: 200 });
+  }),
   http.delete(`${API_PATHS.bff}/products/:id`, () => {
     return HttpResponse.json(null, { status: 200 });
   }),
