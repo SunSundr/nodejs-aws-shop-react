@@ -5,6 +5,7 @@ import Check from '@mui/icons-material/Check';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
+import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import RuleIcon from '@mui/icons-material/Rule';
 import AppBar from '@mui/material/AppBar';
@@ -102,6 +103,18 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
             </MenuList>
           </Menu>
         </div>
+
+        <Tooltip title="Subscribe">
+          <IconButton
+            aria-label="subscribe"
+            color="inherit"
+            size="large"
+            component={RouterLink}
+            to="/subscribe"
+          >
+            <MarkEmailReadIcon />
+          </IconButton>
+        </Tooltip>
 
         {auth && (
           <div>
