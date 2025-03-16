@@ -1,6 +1,6 @@
-import axios, { AxiosError } from 'axios';
 import React from 'react';
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
 import API_PATHS from '~/constants/apiPaths';
 import { OrderStatus } from '~/constants/order';
 import { Order } from '~/models/Order';

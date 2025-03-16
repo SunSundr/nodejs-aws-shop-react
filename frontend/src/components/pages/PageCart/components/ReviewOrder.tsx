@@ -1,7 +1,7 @@
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid2';
-import CartItems from '~/components/CartItems/CartItems';
 import { FormikValues } from 'formik';
+import Grid from '@mui/material/Grid2';
+import Typography from '@mui/material/Typography';
+import CartItems from '~/components/CartItems/CartItems';
 import { CartItem } from '~/models/CartItem';
 
 type ReviewOrderProps = {

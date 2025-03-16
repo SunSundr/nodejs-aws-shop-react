@@ -1,13 +1,13 @@
 import { MemoryRouter } from 'react-router-dom';
-import { test, expect } from 'vitest';
-import App from '~/components/App/App';
-import { server } from '~/mocks/server';
+import { screen, waitForElementToBeRemoved } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
+import { expect, test } from 'vitest';
+import App from '~/components/App/App';
 import API_PATHS from '~/constants/apiPaths';
+import { server } from '~/mocks/server';
 import { CartItem } from '~/models/CartItem';
 import { AvailableProduct } from '~/models/Product';
 import { renderWithProviders } from '~/testUtils';
-import { screen, waitForElementToBeRemoved } from '@testing-library/react';
 import { formatAsPrice } from '~/utils/utils';
 
 test('Renders products list', async () => {

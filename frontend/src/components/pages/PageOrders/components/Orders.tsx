@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
 import { useDeleteOrder, useInvalidateOrders, useOrders } from '~/queries/orders';
+import { StyledTableCell } from '~/theme';
 
 export default function Orders() {
   const { data } = useOrders();
@@ -16,39 +16,43 @@ export default function Orders() {
 
   return (
     <TableContainer component={Paper}>
-      <Table aria-label="simple table">
+      <Table aria-label="simple table" size="small">
         <TableHead>
           <TableRow>
-            <TableCell>From</TableCell>
-            <TableCell align="right">Items count</TableCell>
-            <TableCell align="right">Address</TableCell>
-            <TableCell align="right">Status</TableCell>
-            <TableCell align="right">Action</TableCell>
+            <StyledTableCell>From</StyledTableCell>
+            <StyledTableCell align="right">Items count</StyledTableCell>
+            <StyledTableCell align="right">Address</StyledTableCell>
+            <StyledTableCell align="right">Status</StyledTableCell>
+            <StyledTableCell align="right">Action</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data?.map((order) => (
             <TableRow key={order.id}>
-              <TableCell component="th" scope="row">
+              <StyledTableCell component="th" scope="row">
                 {order.address?.firstName} {order.address?.lastName}
-              </TableCell>
-              <TableCell align="right">{order.items.length}</TableCell>
-              <TableCell align="right">{order.address?.address}</TableCell>
-              <TableCell align="right">
+              </StyledTableCell>
+              <StyledTableCell align="right">{order.items.length}</StyledTableCell>
+              <StyledTableCell align="right">{order.address?.address}</StyledTableCell>
+              <StyledTableCell align="right">
                 {order.statusHistory[order.statusHistory.length - 1].status}
-              </TableCell>
-              <TableCell align="right">
-                <Button size="small" color="primary" component={Link} to={order.id}>
-                  Manage
-                </Button>
-                <Button
-                  size="small"
-                  color="secondary"
-                  onClick={() => deleteOrder(order.id, { onSuccess: invalidateOrders })}
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                <div
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'end', gap: 8 }}
                 >
-                  Delete
-                </Button>
-              </TableCell>
+                  <Button size="small" color="primary" component={Link} to={order.id}>
+                    Manage
+                  </Button>
+                  <Button
+                    size="small"
+                    color="warning"
+                    onClick={() => deleteOrder(order.id, { onSuccess: invalidateOrders })}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </StyledTableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -1,68 +1,77 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import { formatAsPrice, sortProductsById } from '~/utils/utils';
 import {
   useAvailableProducts,
   useDeleteAvailableProduct,
   useInvalidateAvailableProducts,
 } from '~/queries/products';
+import { StyledTableCell } from '~/theme';
+import { formatAsPrice, sortProductsById } from '~/utils/utils';
 
 export default function ProductsTable() {
   const { data = [] } = useAvailableProducts();
   const { mutate: deleteAvailableProduct } = useDeleteAvailableProduct();
   const invalidateAvailableProducts = useInvalidateAvailableProducts();
+  const navigate = useNavigate();
 
   return (
     <TableContainer component={Paper}>
-      <Table aria-label="simple table">
+      <Table aria-label="simple table" size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Title</TableCell>
-            <TableCell align="right">Description</TableCell>
-            <TableCell align="right">Price</TableCell>
-            <TableCell align="right">Count</TableCell>
-            <TableCell align="right">Action</TableCell>
+            <StyledTableCell>Title</StyledTableCell>
+            <StyledTableCell align="right">Description</StyledTableCell>
+            <StyledTableCell align="right">Price</StyledTableCell>
+            <StyledTableCell align="right">Count</StyledTableCell>
+            <StyledTableCell align="right">Action</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {sortProductsById(data).map((product) => (
             <TableRow key={product.id}>
-              <TableCell component="th" scope="row">
+              <StyledTableCell component="th" scope="row">
                 {product.title}
-              </TableCell>
-              <TableCell align="right">{product.description}</TableCell>
-              <TableCell align="right">{formatAsPrice(product.price)}</TableCell>
-              <TableCell align="right">{product.count}</TableCell>
-              <TableCell align="right">
-                <Button
-                  size="small"
-                  color="primary"
-                  component={Link}
-                  to={`/admin/product-form/${product.id}`}
+              </StyledTableCell>
+              <StyledTableCell align="right">{product.description}</StyledTableCell>
+              <StyledTableCell align="right">{formatAsPrice(product.price)}</StyledTableCell>
+              <StyledTableCell align="right">{product.count}</StyledTableCell>
+              <StyledTableCell align="right">
+                <div
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'end', gap: 8 }}
                 >
-                  Manage
-                </Button>
-                <Button
-                  size="small"
-                  color="secondary"
-                  onClick={() => {
-                    if (product.id) {
-                      deleteAvailableProduct(product.id, {
-                        onSuccess: invalidateAvailableProducts,
-                      });
+                  <Button
+                    size="small"
+                    color="primary"
+                    onClick={() =>
+                      navigate(`/admin/product-form/${product.id}`, {
+                        state: { product },
+                      })
                     }
-                  }}
-                >
-                  Delete
-                </Button>
-              </TableCell>
+                  >
+                    Manage
+                  </Button>
+                  <Button
+                    size="small"
+                    color="warning"
+                    // variant="outlined"
+                    onClick={() => {
+                      if (product.id) {
+                        deleteAvailableProduct(product.id, {
+                          onSuccess: invalidateAvailableProducts,
+                        });
+                      }
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </StyledTableCell>
             </TableRow>
           ))}
         </TableBody>
