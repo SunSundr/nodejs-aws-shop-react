@@ -8,6 +8,7 @@ import PageProductForm from '~/components/pages/PageProductForm/PageProductForm'
 import PageProducts from '~/components/pages/PageProducts/PageProducts';
 import PageDetail from '../pages/PageDetail/PageDetail';
 import PageNotFound from '../pages/PageNotFound/PageNotFound';
+import PageSubscribe from '../pages/PageSubscribe/PageSubscribe';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<PageProducts />} />
         <Route path="/products" element={<Navigate to="/" replace />} />
+        <Route path="/subscribe" element={<PageSubscribe />} />
         <Route path="/products/:id" element={<PageDetail />} />
         <Route path="cart" element={<PageCart />} />
         <Route path="admin/orders">

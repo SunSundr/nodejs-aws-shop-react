@@ -1,4 +1,4 @@
-const apiUrl = 'https://1gegmvjyg6.execute-api.eu-north-1.amazonaws.com/dev';
+const apiUrl = 'https://xcunh9a844.execute-api.eu-north-1.amazonaws.com/dev';
 
 const API_PATHS = {
   product: apiUrl,
@@ -6,6 +6,7 @@ const API_PATHS = {
   import: 'https://387mfqhlx3.execute-api.eu-north-1.amazonaws.com/dev',
   bff: apiUrl,
   cart: apiUrl,
+  subscribe: 'https://xcunh9a844.execute-api.eu-north-1.amazonaws.com/dev',
 };
 
 export default API_PATHS;
