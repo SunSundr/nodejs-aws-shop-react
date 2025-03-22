@@ -12,3 +12,5 @@ const API_PATHS = {
 export default API_PATHS;
 
 export const RESERVED_ID_PREFIX = '7567ec4b-b10c-45c5-9345-fc73c48a80';
+
+export const LOCALSTORAGE_AUTH_TOKEN_KEY = 'authorization_token';
