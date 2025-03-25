@@ -1,14 +1,18 @@
 import { useState } from 'react';
+import { useAuth } from 'react-oidc-context';
 import { Link as RouterLink } from 'react-router-dom';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Check from '@mui/icons-material/Check';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import RuleIcon from '@mui/icons-material/Rule';
 import AppBar from '@mui/material/AppBar';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -20,6 +24,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Cart from '~/components/MainLayout/components/Cart';
+import { LOGOUT_URL } from '~/constants/apiPaths';
 import { STORE_NAME } from '~/constants/common';
 
 type HeaderProps = {
@@ -30,7 +35,17 @@ type HeaderProps = {
 export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
   const [anchorAuthEl, setAuthAnchorEl] = useState<null | HTMLElement>(null);
   const [anchorThemeEl2, setThemeAnchorEl] = useState<null | HTMLElement>(null);
-  const auth = true;
+  const auth = useAuth();
+  const isLogin = auth.isAuthenticated;
+  const isAdmin = isLogin && (auth.user?.profile['custom:admin'] as boolean);
+
+  const signOutRedirect = () => {
+    setTimeout(() => {
+      // auth.removeUser();
+      localStorage.setItem('removeUser', 'true');
+      window.location.href = LOGOUT_URL;
+    }, 0);
+  };
 
   const handleAuthMenuClose = () => setAuthAnchorEl(null);
   const handleThemeMenuClose = () => setThemeAnchorEl(null);
@@ -116,52 +131,81 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
           </IconButton>
         </Tooltip>
 
-        {auth && (
-          <div>
-            <Tooltip title="Admin Menu">
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={(event) => setAuthAnchorEl(event.currentTarget)}
-                color="inherit"
-                size="large"
-              >
-                <AccountCircle />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorAuthEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={!!anchorAuthEl}
-              onClose={handleAuthMenuClose}
+        <div>
+          <Tooltip
+            title={isLogin ? `${isAdmin ? 'Admin' : 'User'}: ${auth.user?.profile.email}` : 'User'}
+          >
+            <IconButton
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={(event) => setAuthAnchorEl(event.currentTarget)}
+              color="inherit"
+              size="large"
             >
-              <MenuList sx={{ padding: 0 }} onMouseLeave={handleAuthMenuClose}>
-                <MenuItem component={RouterLink} to="/admin/orders" onClick={handleAuthMenuClose}>
+              <AccountCircle />
+            </IconButton>
+          </Tooltip>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorAuthEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={!!anchorAuthEl}
+            onClose={handleAuthMenuClose}
+          >
+            {isLogin ? (
+              <MenuList
+                sx={{ padding: 0 }}
+                onMouseLeave={() => (isAdmin ? handleAuthMenuClose() : null)}
+              >
+                {isAdmin && (
+                  <MenuItem component={RouterLink} to="/admin/orders" onClick={handleAuthMenuClose}>
+                    <ListItemIcon>
+                      <RuleIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Manage orders</ListItemText>
+                  </MenuItem>
+                )}
+                {isAdmin && (
+                  <MenuItem
+                    component={RouterLink}
+                    to="/admin/products"
+                    onClick={handleAuthMenuClose}
+                  >
+                    <ListItemIcon>
+                      <ProductionQuantityLimitsIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Manage products</ListItemText>
+                  </MenuItem>
+                )}
+                {isAdmin && <Divider />}
+                <MenuItem onClick={() => signOutRedirect()}>
                   <ListItemIcon>
-                    <RuleIcon fontSize="small" />
+                    <LogoutIcon fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText>Manage orders</ListItemText>
-                </MenuItem>
-                <MenuItem component={RouterLink} to="/admin/products" onClick={handleAuthMenuClose}>
-                  <ListItemIcon>
-                    <ProductionQuantityLimitsIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>Manage products</ListItemText>
+                  <ListItemText>Sign Out</ListItemText>
                 </MenuItem>
               </MenuList>
-            </Menu>
-          </div>
-        )}
+            ) : (
+              <MenuList sx={{ padding: 0 }}>
+                <MenuItem onClick={() => auth.signinRedirect()}>
+                  <ListItemIcon>
+                    <LoginIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Sign in</ListItemText>
+                </MenuItem>
+              </MenuList>
+            )}
+          </Menu>
+        </div>
         <Cart />
       </Toolbar>
     </AppBar>
