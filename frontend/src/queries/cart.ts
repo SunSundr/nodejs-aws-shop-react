@@ -1,13 +1,19 @@
 import React from 'react';
+import { useAuth } from 'react-oidc-context';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import API_PATHS from '~/constants/apiPaths';
 import { CartItem } from '~/models/CartItem';
 
 export function useCart() {
+  const auth = useAuth();
   return useQuery<CartItem[], AxiosError>({
     queryKey: ['cart'],
     queryFn: async () => {
+      // temp solution
+      if (!auth.isAuthenticated) {
+        return [];
+      }
       const res = await axios.get<CartItem[]>(`${API_PATHS.cart}/profile/cart`, {
         headers: {
           Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
