@@ -26,11 +26,15 @@ import Typography from '@mui/material/Typography';
 import Cart from '~/components/MainLayout/components/Cart';
 import { LOGOUT_URL } from '~/constants/apiPaths';
 import { STORE_NAME } from '~/constants/common';
+import { useAuthTask8 } from '~/models/authTask8';
+import emojiLogin from '~/utils/emoji';
 
 type HeaderProps = {
   themeSwitch: (v: 'dark' | 'light') => void;
   isDarkMode: boolean;
 };
+
+const emoji = emojiLogin[Math.floor(Math.random() * emojiLogin.length)];
 
 export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
   const [anchorAuthEl, setAuthAnchorEl] = useState<null | HTMLElement>(null);
@@ -38,6 +42,36 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
   const auth = useAuth();
   const isLogin = auth.isAuthenticated;
   const isAdmin = isLogin && (auth.user?.profile['custom:admin'] as boolean);
+
+  const userNameTask8 = localStorage.getItem('sunsundr_store_username');
+
+  const menuPartTask8 = () => {
+    const isLoginTask8 = useAuthTask8();
+    return isLoginTask8 ? (
+      <MenuItem
+        onClick={() => {
+          localStorage.removeItem('authorization_token');
+          localStorage.removeItem('sunsundr_store_username');
+          handleAuthMenuClose();
+          setTimeout(() => {
+            window.location.href = window.location.origin;
+          }, 100);
+        }}
+      >
+        <ListItemIcon>
+          <LogoutIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText>Logout (Task 8)</ListItemText>
+      </MenuItem>
+    ) : (
+      <MenuItem component={RouterLink} to="/signin" onClick={() => handleAuthMenuClose()}>
+        <ListItemIcon>
+          <LoginIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText>Login (Task 8)</ListItemText>
+      </MenuItem>
+    );
+  };
 
   const signOutRedirect = () => {
     setTimeout(() => {
@@ -62,6 +96,10 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
           >
             {STORE_NAME}
           </Link>
+        </Typography>
+
+        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          {userNameTask8 && `${emoji} Hello, ${userNameTask8}!`}
         </Typography>
 
         <div>
@@ -193,6 +231,7 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
                   </ListItemIcon>
                   <ListItemText>Sign Out</ListItemText>
                 </MenuItem>
+                {menuPartTask8()}
               </MenuList>
             ) : (
               <MenuList sx={{ padding: 0 }}>
@@ -202,6 +241,8 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
                   </ListItemIcon>
                   <ListItemText>Sign in</ListItemText>
                 </MenuItem>
+                {/* temporary solution (task 8) */}
+                {menuPartTask8()}
               </MenuList>
             )}
           </Menu>

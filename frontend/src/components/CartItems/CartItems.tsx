@@ -4,23 +4,49 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import AddProductToCart from '~/components/AddProductToCart/AddProductToCart';
 import { CartItem } from '~/models/CartItem';
+import { Product } from '~/models/Product';
+import { useAvailableProducts } from '~/queries/products';
 import { formatAsPrice, truncateDescription } from '~/utils/utils';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 type CartItemsProps = {
   items: CartItem[];
   isEditable: boolean;
 };
 
+const errorProduct: Product = {
+  id: 'error',
+  title: 'Error',
+  description: 'Error',
+  price: 0,
+  imageURL: '',
+};
+
 export default function CartItems({ items, isEditable }: CartItemsProps) {
+  const { data = [], isLoading } = useAvailableProducts();
+
+  const getProductsById = (id: string): Product => {
+    return data.find((item) => item.id === id) || errorProduct;
+  };
+
+  const updatedItems = items.map((item) => ({
+    ...item,
+    product: getProductsById(String(item.product.id)),
+  }));
+
   const totalPrice: number = items.reduce(
-    (total, item) => item.count * item.product.price + total,
+    (total, item) => item.count * item.product.price || 0 + total,
     0,
   );
+
+  if (isLoading) {
+    return <LoadingSpinner offset={480} />;
+  }
 
   return (
     <>
       <List disablePadding>
-        {items.map((cartItem: CartItem) => (
+        {updatedItems.map((cartItem: CartItem) => (
           <ListItem sx={{ padding: (theme) => theme.spacing(1, 0) }} key={cartItem.product.id}>
             {isEditable && (
               <div style={{ marginRight: 16 }}>

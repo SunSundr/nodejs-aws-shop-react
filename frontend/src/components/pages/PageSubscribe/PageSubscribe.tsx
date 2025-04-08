@@ -104,8 +104,9 @@ export default function PageSubscribe() {
   return (
     <Box
       sx={{
-        mx: 28,
         my: 4,
+        maxWidth: 480,
+        margin: '32px auto',
       }}
     >
       <Paper sx={{ padding: 3 }}>

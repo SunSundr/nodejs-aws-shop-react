@@ -1,9 +1,11 @@
+import { useNavigate } from 'react-router-dom';
 import Add from '@mui/icons-material/Add';
 import Remove from '@mui/icons-material/Remove';
 import CartIcon from '@mui/icons-material/ShoppingCart';
 import { Box } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import { useAuthTask8 } from '~/models/authTask8';
 import { Product } from '~/models/Product';
 import { useCart, useInvalidateCart, useUpsertCart } from '~/queries/cart';
 
@@ -15,9 +17,15 @@ export default function AddProductToCart({ product }: AddProductToCartProps) {
   const { data = [], isFetching } = useCart();
   const { mutate: upsertCart } = useUpsertCart();
   const invalidateCart = useInvalidateCart();
-  const cartItem = data.find((i) => i.product.id === product.id);
+  const cartItem = data.find((i) => i.product?.id === product.id);
+  const isAuth = useAuthTask8();
+  const navigate = useNavigate();
 
   const addProduct = () => {
+    if (!isAuth) {
+      navigate('/signin');
+      return;
+    }
     upsertCart(
       { product, count: cartItem ? cartItem.count + 1 : 1 },
       { onSuccess: invalidateCart },
