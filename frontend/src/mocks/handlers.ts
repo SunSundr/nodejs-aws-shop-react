@@ -25,6 +25,7 @@ export const handlers = [
   http.delete(`${API_PATHS.bff}/products/:id`, () => {
     return HttpResponse.json(null, { status: 200 });
   }),
+  //----------------------------------------------
   // profile:
   http.get(`${API_PATHS.cart}/profile/cart`, () => {
     return HttpResponse.json(cart);
@@ -39,6 +40,7 @@ export const handlers = [
   http.put(`${API_PATHS.order}/order`, () => {
     return HttpResponse.json(null, { status: 200 });
   }),
+  //----------------------------------------------
   http.get(`${API_PATHS.order}/order/:id`, ({ params }) => {
     const order = orders.find((o) => o.id === params.id);
     return order ? HttpResponse.json(order) : HttpResponse.json(null, { status: 404 });

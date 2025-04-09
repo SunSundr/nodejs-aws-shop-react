@@ -47,7 +47,10 @@ export default function Orders() {
                   <Button
                     size="small"
                     color="warning"
-                    onClick={() => deleteOrder(order.id, { onSuccess: invalidateOrders })}
+                    onClick={() => {
+                      console.warn('Deletion of mock data could not be completed');
+                      deleteOrder(order.id, { onSuccess: invalidateOrders });
+                    }}
                   >
                     Delete
                   </Button>

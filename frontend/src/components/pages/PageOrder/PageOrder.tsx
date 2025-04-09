@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQueries } from '@tanstack/react-query';
 import axios from 'axios';
 import { Field, Form, Formik, FormikProps } from 'formik';
@@ -15,6 +15,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import TextField from '~/components/Form/TextField';
+import LoadingSpinner from '~/components/LoadingSpinner/LoadingSpinner';
 import ReviewOrder from '~/components/pages/PageCart/components/ReviewOrder';
 import PaperLayout from '~/components/PaperLayout/PaperLayout';
 import API_PATHS from '~/constants/apiPaths';
@@ -23,6 +24,7 @@ import { CartItem } from '~/models/CartItem';
 import { Order, OrderItem } from '~/models/Order';
 import { AvailableProduct } from '~/models/Product';
 import { useInvalidateOrder, useUpdateOrderStatus } from '~/queries/orders';
+import { getErrorProduct } from '~/queries/products';
 
 type FormValues = {
   status: OrderStatus;
@@ -31,12 +33,13 @@ type FormValues = {
 
 export default function PageOrder() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const results = useQueries({
     queries: [
       {
         queryKey: ['order', { id }],
         queryFn: async () => {
-          const res = await axios.get<Order>(`${API_PATHS.order}/order/${id}`);
+          const res = await axios.get<Order>(`${API_PATHS.orderMock}/order/${id}`);
           return res.data;
         },
       },
@@ -60,7 +63,8 @@ export default function PageOrder() {
       return order.items.map((item: OrderItem) => {
         const product = products.find((p) => p.id === item.productId);
         if (!product) {
-          throw new Error('Product not found');
+          console.error('Product not found');
+          return { product: getErrorProduct(item.productId), count: 0 };
         }
         return { product, count: item.count };
       });
@@ -68,7 +72,7 @@ export default function PageOrder() {
     return [];
   }, [order, products]);
 
-  if (isOrderLoading || isProductsLoading) return <p>loading...</p>;
+  if (isOrderLoading || isProductsLoading) return <LoadingSpinner />;
 
   const statusHistory = order?.statusHistory || [];
 
@@ -76,8 +80,11 @@ export default function PageOrder() {
 
   return order ? (
     <PaperLayout>
-      <Typography component="h1" variant="h4" align="center">
-        Manage order
+      <Typography component="h2" variant="h4" align="center">
+        Manage order{' '}
+        <span style={{ fontSize: 14 }}>
+          <i>(mock data)</i>
+        </span>
       </Typography>
       <ReviewOrder address={order.address} items={cartItems} />
       <Typography variant="h6">Status:</Typography>
@@ -89,12 +96,13 @@ export default function PageOrder() {
         <Formik
           initialValues={{ status: lastStatusItem.status, comment: '' }}
           enableReinitialize
-          onSubmit={(values) =>
+          onSubmit={(values) => {
+            console.warn('Changing the status of the mock data could not be completed');
             updateOrderStatus(
               { id: order.id, ...values },
               { onSuccess: () => invalidateOrder(order.id) },
-            )
-          }
+            ).finally(() => navigate('/admin/orders'));
+          }}
         >
           {({ values, dirty, isSubmitting }: FormikProps<FormValues>) => (
             <Form autoComplete="off">
