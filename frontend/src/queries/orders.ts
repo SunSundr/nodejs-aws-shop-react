@@ -39,7 +39,6 @@ export function useUpdateOrderStatus() {
 export function useSubmitOrder() {
   return useMutation({
     mutationFn: async (values: Omit<Order, 'id'>) => {
-      console.log('SUBMIT ORDERS');
       const updatedValues = {
         //user_id: 'user_id',
         //cart_id: cartId,
@@ -54,8 +53,8 @@ export function useSubmitOrder() {
           address: values.address.address,
         },
         comments: values.address.comment,
-        status: 'OPEN',
-        total: values.items.length,
+        status: OrderStatus.Open,
+        total: values.total,
       };
 
       return axios.put<Omit<Order, 'id'>>(`${API_PATHS.order}/order`, updatedValues, {

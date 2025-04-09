@@ -6,7 +6,10 @@ export default function PageOrders() {
   return (
     <Box py={3}>
       <Typography variant="h6" gutterBottom>
-        Manage orders
+        Manage orders{' '}
+        <span style={{ fontSize: 12 }}>
+          <i>(mock data)</i>
+        </span>
       </Typography>
       <Orders />
     </Box>

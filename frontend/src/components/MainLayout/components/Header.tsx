@@ -45,6 +45,10 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
 
   const userNameTask8 = localStorage.getItem('sunsundr_store_username');
 
+  const truncateString = (str: string, limit = 50) => {
+    return str.length > limit ? str.slice(0, limit) + '...' : str;
+  };
+
   const menuPartTask8 = () => {
     const isLoginTask8 = useAuthTask8();
     return isLoginTask8 ? (
@@ -98,8 +102,8 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
           </Link>
         </Typography>
 
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          {userNameTask8 && `${emoji} Hello, ${userNameTask8}!`}
+        <Typography sx={{ flexGrow: 1 }}>
+          {userNameTask8 && truncateString(`${emoji}\u00A0Hello,\u00A0${userNameTask8}!`)}
         </Typography>
 
         <div>
