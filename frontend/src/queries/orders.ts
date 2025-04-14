@@ -9,7 +9,7 @@ export function useOrders() {
   return useQuery<Order[], AxiosError>({
     queryKey: ['orders'],
     queryFn: async () => {
-      const res = await axios.get<Order[]>(`${API_PATHS.order}/order`);
+      const res = await axios.get<Order[]>(`${API_PATHS.orderMock}/order`);
       return res.data;
     },
   });
@@ -27,7 +27,7 @@ export function useUpdateOrderStatus() {
   return useMutation({
     mutationFn: async (values: { id: string; status: OrderStatus; comment: string }) => {
       const { id, ...data } = values;
-      return axios.put(`${API_PATHS.order}/order/${id}/status`, data, {
+      return axios.put(`${API_PATHS.orderMock}/order/${id}/status`, data, {
         headers: {
           Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
         },
@@ -39,7 +39,25 @@ export function useUpdateOrderStatus() {
 export function useSubmitOrder() {
   return useMutation({
     mutationFn: async (values: Omit<Order, 'id'>) => {
-      return axios.put<Omit<Order, 'id'>>(`${API_PATHS.order}/order`, values, {
+      const updatedValues = {
+        //user_id: 'user_id',
+        //cart_id: cartId,
+        payment: JSON.stringify({
+          method: 'paypal',
+          transactionId: `txn_${Array.from({ length: 5 }, () => Math.floor(Math.random() * 10)).join('')}`,
+        }),
+        delivery: {
+          type: 'post',
+          lastName: values.address.lastName,
+          firstName: values.address.firstName,
+          address: values.address.address,
+        },
+        comments: values.address.comment,
+        status: OrderStatus.Open,
+        total: values.total,
+      };
+
+      return axios.put<Omit<Order, 'id'>>(`${API_PATHS.order}/order`, updatedValues, {
         headers: {
           Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
         },
@@ -59,7 +77,7 @@ export function useInvalidateOrder() {
 export function useDeleteOrder() {
   return useMutation({
     mutationFn: async (id: string) => {
-      return axios.delete(`${API_PATHS.order}/order/${id}`, {
+      return axios.delete(`${API_PATHS.orderMock}/order/${id}`, {
         headers: {
           Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
         },

@@ -11,6 +11,7 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { AdminLayout } from '../pages/AdminLayout';
 import PageDetail from '../pages/PageDetail/PageDetail';
 import { PageLogin } from '../pages/PageLogin/PageLogin';
+import PageLoginTask8 from '../pages/PageLoginTask8/PageLoginTask8';
 import { PageLogout } from '../pages/PageLogout/PageLogout';
 import PageNotFound from '../pages/PageNotFound/PageNotFound';
 import PageSubscribe from '../pages/PageSubscribe/PageSubscribe';
@@ -45,9 +46,13 @@ function App() {
         <Route path="/products" element={<Navigate to="/" replace />} />
         <Route path="/subscribe" element={<PageSubscribe />} />
         <Route path="/products/:id" element={<PageDetail />} />
+        <Route path="cart" element={<PageCart />} />
+
+        {/* temporary solution (task 8) */}
+        <Route path="signin" element={<PageLoginTask8 mode="login" />} />
+        <Route path="signup" element={<PageLoginTask8 mode="register" />} />
         {/* Protected pages */}
         <Route element={<ProtectedLayout />}>
-          <Route path="cart" element={<PageCart />} />
           <Route path="login" element={<PageLogin />} />
           <Route path="logout" element={<PageLogout />} />
         </Route>

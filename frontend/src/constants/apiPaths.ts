@@ -2,10 +2,14 @@ const apiUrl = 'https://xcunh9a844.execute-api.eu-north-1.amazonaws.com/dev';
 
 const API_PATHS = {
   product: apiUrl,
-  order: apiUrl,
+  orderMock: apiUrl,
   import: 'https://387mfqhlx3.execute-api.eu-north-1.amazonaws.com/dev',
   bff: apiUrl,
-  cart: apiUrl,
+  cart: 'https://ioj2n6t5s6frqgkdq2rogcbvim0mkiot.lambda-url.eu-north-1.on.aws/api',
+  //cart: 'https://37pfsxymcyin36rhcpcnpwzwpe0fwelv.lambda-url.eu-north-1.on.aws/api', // second valid url)))
+  //cart: 'http://localhost:4000/api',
+  order: 'https://ioj2n6t5s6frqgkdq2rogcbvim0mkiot.lambda-url.eu-north-1.on.aws/api/profile/cart',
+  // order: 'https://37pfsxymcyin36rhcpcnpwzwpe0fwelv.lambda-url.eu-north-1.on.aws/api/profile/cart',
   subscribe: 'https://xcunh9a844.execute-api.eu-north-1.amazonaws.com/dev',
 };
 

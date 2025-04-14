@@ -3,7 +3,7 @@ import { useAuth } from 'react-oidc-context';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import API_PATHS from '~/constants/apiPaths';
-import { AvailableProduct } from '~/models/Product';
+import { AvailableProduct, Product } from '~/models/Product';
 
 export function useAvailableProducts() {
   return useQuery<AvailableProduct[], AxiosError>({
@@ -94,4 +94,14 @@ export function getErrorMessage(error: AxiosError | null) {
   } else {
     return 'Unknown error';
   }
+}
+
+export function getErrorProduct(id: string): Product {
+  return {
+    id,
+    title: 'Error',
+    description: `id: ${id}`,
+    price: 0,
+    imageURL: '',
+  };
 }
