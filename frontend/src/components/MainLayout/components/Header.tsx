@@ -65,14 +65,14 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
         <ListItemIcon>
           <LogoutIcon fontSize="small" />
         </ListItemIcon>
-        <ListItemText>Logout (Task 8)</ListItemText>
+        <ListItemText>Logout (Task 8|9)</ListItemText>
       </MenuItem>
     ) : (
       <MenuItem component={RouterLink} to="/signin" onClick={() => handleAuthMenuClose()}>
         <ListItemIcon>
           <LoginIcon fontSize="small" />
         </ListItemIcon>
-        <ListItemText>Login (Task 8)</ListItemText>
+        <ListItemText>Login (Task 8|9)</ListItemText>
       </MenuItem>
     );
   };
