@@ -27,10 +27,10 @@ export const handlers = [
   }),
   //----------------------------------------------
   // profile:
-  http.get(`${API_PATHS.cart}/profile/cart`, () => {
+  http.get(`${API_PATHS.bff}/cart`, () => {
     return HttpResponse.json(cart);
   }),
-  http.put(`${API_PATHS.cart}/profile/cart`, () => {
+  http.put(`${API_PATHS.bff}/cart`, () => {
     return HttpResponse.json(null, { status: 200 });
   }),
   // order:

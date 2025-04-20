@@ -58,7 +58,7 @@ export default function PageLoginTask8({ mode }: AuthFormProps) {
     setIsError(null);
     setIsLoading(true);
     const logIn = async (vals = values) => {
-      const path = `${API_PATHS.cart}/auth/login`;
+      const path = `${API_PATHS.bff}/login`;
       const response = await axios.post(path, vals, { validateStatus: () => true });
       if (response.status !== 200) {
         setIsError(`${response.data.statusCode} ${response.data.message}`);
@@ -75,7 +75,7 @@ export default function PageLoginTask8({ mode }: AuthFormProps) {
     if (isLogin) {
       await logIn();
     } else {
-      const path = `${API_PATHS.cart}/auth/register`;
+      const path = `${API_PATHS.bff}/register`;
       const response = await axios.post(path, values, { validateStatus: () => true });
       if (response.status !== 201) {
         setIsError(`${response.data.statusCode} ${response.data.message}`);

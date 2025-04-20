@@ -1,16 +1,11 @@
 const apiUrl = 'https://xcunh9a844.execute-api.eu-north-1.amazonaws.com/dev';
 
-// Cart Service API (cloudfront for elasticbeanstalk)
-const apiCartCludFrontEBSUrl = 'https://d1wr58fh208zzd.cloudfront.net';
-
 const API_PATHS = {
-  product: apiUrl,
-  orderMock: apiUrl,
   import: 'https://387mfqhlx3.execute-api.eu-north-1.amazonaws.com/dev',
-  bff: apiUrl,
-  cart: `${apiCartCludFrontEBSUrl}/api`,
-  order: `${apiCartCludFrontEBSUrl}/api/profile/cart`,
-  subscribe: 'https://xcunh9a844.execute-api.eu-north-1.amazonaws.com/dev',
+  bff: 'https://dens454cy0aoe.cloudfront.net',
+  order: 'https://d1wr58fh208zzd.cloudfront.net/api/profile/cart',
+  orderMock: apiUrl,
+  subscribe: apiUrl,
 };
 
 export default API_PATHS;

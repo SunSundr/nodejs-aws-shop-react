@@ -31,7 +31,7 @@ test('Renders products list', async () => {
     http.get(`${API_PATHS.bff}/products`, () => {
       return HttpResponse.json(products, { status: 200 });
     }),
-    http.get(`${API_PATHS.cart}/profile/cart`, () => {
+    http.get(`${API_PATHS.bff}/cart`, () => {
       return HttpResponse.json<CartItem[]>([], { status: 200 });
     }),
   );
