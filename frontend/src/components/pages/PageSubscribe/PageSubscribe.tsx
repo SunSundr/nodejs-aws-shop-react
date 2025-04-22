@@ -33,9 +33,8 @@ export default function PageSubscribe() {
   const [sendSuccess, setSendSuccess] = useState(false);
 
   const onSubmit = (values: Subscription) => {
-    console.log(values);
     setIsLoading(true);
-    fetch(`${API_PATHS.subscribe}/products/subscribe`, {
+    fetch(`${API_PATHS.bff}/products/subscribe`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

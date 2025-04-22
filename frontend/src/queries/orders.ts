@@ -57,7 +57,7 @@ export function useSubmitOrder() {
         total: values.total,
       };
 
-      return axios.put<Omit<Order, 'id'>>(`${API_PATHS.order}/order`, updatedValues, {
+      return axios.put<Omit<Order, 'id'>>(`${API_PATHS.bff}/cart/order`, updatedValues, {
         headers: {
           Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
         },
