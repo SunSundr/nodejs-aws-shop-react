@@ -54,37 +54,32 @@ export default function PageLoginTask8({ mode }: AuthFormProps) {
     : { name: '', email: '', password: '' };
 
   const onSubmit = async (values: LoginValues | RegisterValues) => {
-    // console.log(values);
     setIsError(null);
     setIsLoading(true);
     const logIn = async (vals = values) => {
-      const path = `${API_PATHS.cart}/auth/login`;
+      const path = `${API_PATHS.bff}/login`;
       const response = await axios.post(path, vals, { validateStatus: () => true });
       if (response.status !== 200) {
         setIsError(`${response.data.statusCode} ${response.data.message}`);
-        // console.log(response.data.message);
       } else {
         setSendSuccess(true);
         const token = response.data.access_token;
         localStorage.setItem('authorization_token', token);
         localStorage.setItem('sunsundr_store_username', (vals as LoginValues).username);
       }
-      // console.log(response.data);
     };
 
     if (isLogin) {
       await logIn();
     } else {
-      const path = `${API_PATHS.cart}/auth/register`;
+      const path = `${API_PATHS.bff}/register`;
       const response = await axios.post(path, values, { validateStatus: () => true });
       if (response.status !== 201) {
         setIsError(`${response.data.statusCode} ${response.data.message}`);
-        // console.log(response.data.message);
       } else {
         await logIn({ username: (values as RegisterValues).name, password: values.password });
         setSendSuccess(true);
       }
-      // console.log(response.data);
     }
     setIsLoading(false);
   };
@@ -99,7 +94,6 @@ export default function PageLoginTask8({ mode }: AuthFormProps) {
     <Button
       color="secondary"
       variant="text"
-      // onClick={() => setCurrentMode(isLogin ? 'register' : 'login')}
       component={RouterLink}
       to={isLogin ? '/signup' : '/signin'}
       sx={{ mt: 2 }}

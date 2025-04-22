@@ -1,16 +1,38 @@
 const apiUrl = 'https://xcunh9a844.execute-api.eu-north-1.amazonaws.com/dev';
 
 // Cart Service API (cloudfront for elasticbeanstalk)
-const apiCartCludFrontEBSUrl = 'https://d1wr58fh208zzd.cloudfront.net';
+// const apiCartCludFrontEBSUrl = 'https://d1wr58fh208zzd.cloudfront.net'; // not used, now accessed via BFF
 
+/** API Service Endpoints Configuration */
 const API_PATHS = {
-  product: apiUrl,
-  orderMock: apiUrl,
+  // --- Active Endpoints ---
+
+  /** BFF Gateway (primary endpoint for most requests) */
+  bff: 'https://dens454cy0aoe.cloudfront.net',
+
+  /** Import Service */
   import: 'https://387mfqhlx3.execute-api.eu-north-1.amazonaws.com/dev',
-  bff: apiUrl,
-  cart: `${apiCartCludFrontEBSUrl}/api`,
-  order: `${apiCartCludFrontEBSUrl}/api/profile/cart`,
-  subscribe: 'https://xcunh9a844.execute-api.eu-north-1.amazonaws.com/dev',
+
+  /**
+   * Temporary Order Mock API (admin only)
+   * @note Using mock due to incompatibility between
+   * PostgreSQL schema requirements and legacy order service
+   */
+  orderMock: apiUrl,
+
+  // --- Deprecated Endpoints (use BFF instead) ---
+
+  /** @deprecated Product Service - now accessed via BFF */
+  // product: apiUrl,
+
+  /** @deprecated Product Service (email subscription) - now accessed via BFF */
+  // subscribe: apiUrl,
+
+  /** @deprecated Cart Service - now accessed via BFF */
+  // order: `${apiCartCludFrontEBSUrl}/api/profile/cart`,
+
+  /** @deprecated Cart Service - now accessed via BFF */
+  // cart: `${apiCartCludFrontEBSUrl}/api`,
 };
 
 export default API_PATHS;
