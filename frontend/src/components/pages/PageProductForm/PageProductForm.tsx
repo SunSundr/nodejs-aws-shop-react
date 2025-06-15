@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import Button from '@mui/material/Button';
@@ -6,14 +7,15 @@ import Typography from '@mui/material/Typography';
 import TextField from '~/components/Form/TextField';
 import LoadingSpinner from '~/components/LoadingSpinner/LoadingSpinner';
 import PaperLayout from '~/components/PaperLayout/PaperLayout';
+import { PopUp } from '~/components/utils/PopUp';
 import { AvailableProduct, AvailableProductSchema } from '~/models/Product';
 import {
-  getErrorMessage,
   useAvailableProduct,
-  useInvalidateAvailableProducts,
-  useRemoveProductCache,
-  useUpsertAvailableProduct,
+  // useInvalidateAvailableProducts,
+  // useRemoveProductCache,
+  useUpdateAvailableProduct,
 } from '~/queries/products';
+import { getAxiosErrorMessage } from '~/utils/getAxiosErrorMessage';
 
 const initialValues: AvailableProduct = AvailableProductSchema.cast({});
 
@@ -23,13 +25,15 @@ export default function PageProductForm() {
   const location = useLocation();
   const { product } = location.state || {};
 
-  const invalidateAvailableProducts = useInvalidateAvailableProducts();
-  const removeProductCache = useRemoveProductCache();
+  // const invalidateAvailableProducts = useInvalidateAvailableProducts();
+  // const removeProductCache = useRemoveProductCache();
   const { data, isLoading, isError, error } = product
     ? { data: product, isLoading: false, isError: false, error: null }
     : useAvailableProduct(id);
 
-  const { mutateAsync: upsertAvailableProduct } = useUpsertAvailableProduct(id);
+  const [updateError, setUpdateError] = useState<Error | null>(null);
+
+  const { mutateAsync: upsertAvailableProduct } = useUpdateAvailableProduct(id);
   const onSubmit = (values: AvailableProduct) => {
     const formattedValues = AvailableProductSchema.cast(values);
     const productToSave = id
@@ -40,9 +44,12 @@ export default function PageProductForm() {
       : formattedValues;
     return upsertAvailableProduct(productToSave, {
       onSuccess: () => {
-        invalidateAvailableProducts();
-        removeProductCache(id);
+        // invalidateAvailableProducts();
+        // removeProductCache(id);
         navigate('/admin/products');
+      },
+      onError: (error) => {
+        setUpdateError(error);
       },
     });
   };
@@ -66,7 +73,7 @@ export default function PageProductForm() {
         {isLoading && <LoadingSpinner offset={520} />}
         {isError && (
           <Typography color="warning" mb={2} sx={{ textAlign: 'center' }}>
-            Error: {getErrorMessage(error)}
+            Error: {getAxiosErrorMessage(error)}
           </Typography>
         )}
         {cancelButton}
@@ -86,7 +93,7 @@ export default function PageProductForm() {
           <Form autoComplete="off">
             <Grid container spacing={2}>
               <Grid size={{ xs: 12 }}>
-                <div>{getErrorMessage(error)}</div>
+                <div>{getAxiosErrorMessage(error)}</div>
               </Grid>
               <Grid size={{ xs: 12 }}>
                 <Field
@@ -143,7 +150,7 @@ export default function PageProductForm() {
               <Grid
                 container
                 size={{ xs: 12 }}
-                justifyContent="space-between"
+                justifyContent="flex-end"
                 style={{ marginTop: '16px' }}
               >
                 {cancelButton}
@@ -152,6 +159,8 @@ export default function PageProductForm() {
                   variant="contained"
                   color="primary"
                   disabled={!dirty || isSubmitting}
+                  sx={{ minWidth: '148px' }}
+                  loading={isSubmitting}
                 >
                   Save Product
                 </Button>
@@ -160,6 +169,7 @@ export default function PageProductForm() {
           </Form>
         )}
       </Formik>
+      <PopUp error={updateError} />
     </PaperLayout>
   );
 }

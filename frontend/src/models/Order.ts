@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { OrderStatus } from '~/constants/order';
+import { CartStatus, OrderStatus } from '~/constants/order';
 
 export const AddressSchema = Yup.object({
   firstName: Yup.string().required().default(''),
@@ -12,6 +12,7 @@ export type Address = Yup.InferType<typeof AddressSchema>;
 
 export const OrderItemSchema = Yup.object({
   productId: Yup.string().required(),
+  category: Yup.string().required(),
   count: Yup.number().integer().positive().required(),
 }).defined();
 
@@ -28,9 +29,27 @@ export type statusHistory = Yup.InferType<typeof statusHistorySchema>;
 export const OrderSchema = Yup.object({
   id: Yup.string().required(),
   items: Yup.array().of(OrderItemSchema).defined(),
-  address: AddressSchema.required(),
+  delivery: AddressSchema.required(),
   statusHistory: Yup.array().of(statusHistorySchema).defined(),
   total: Yup.number().integer().positive(),
+  cartId: Yup.string(),
+  currentStatus: Yup.mixed<OrderStatus>().oneOf(Object.values(OrderStatus)).required(),
+  cart: Yup.object({
+    id: Yup.string(),
+    status: Yup.mixed<CartStatus>().oneOf(Object.values(CartStatus)),
+  }).defined(),
+  createdAt: Yup.string().required(),
+  updatedAt: Yup.string().required(),
 }).defined();
 
 export type Order = Yup.InferType<typeof OrderSchema>;
+export type OrderPart = Omit<
+  Order,
+  'id' | 'statusHistory' | 'currentStatus' | 'cart' | 'createdAt' | 'updatedAt'
+>;
+
+export type OrdersMap = {
+  orders: Order[];
+  count: number;
+  nextToken: string | null;
+};

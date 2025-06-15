@@ -22,16 +22,10 @@ export default function Products() {
 
   return (
     <Grid container spacing={4}>
-      {sortProductsById(data).map(({ count, ...product }, index) => (
+      {sortProductsById(data).map((product, index) => (
         <Grid key={product.id} size={{ xs: 12, sm: 6, md: 4 }}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-            <CardActionArea
-              onClick={() =>
-                navigate(`/products/${product.id}`, {
-                  state: { index, product },
-                })
-              }
-            >
+            <CardActionArea onClick={() => navigate(`/products/${product.id}`)}>
               <CardMedia
                 sx={{ mb: -0.5 }}
                 title={product.title}
@@ -61,7 +55,7 @@ export default function Products() {
               </CardContent>
             </CardActionArea>
             <CardActions sx={{ display: 'flex', justifyContent: 'space-between', mt: 'auto' }}>
-              <AddProductToCart product={product} />
+              <AddProductToCart product={product} showWarning={true} />
               <Typography sx={{ fontWeight: 'bold', paddingRight: '16px' }}>
                 {formatAsPrice(product.price)}
               </Typography>

@@ -1,3 +1,4 @@
 node_modules/
 .env
-cookie.txt
+/cookie.txt
+/user.vscode.cjs

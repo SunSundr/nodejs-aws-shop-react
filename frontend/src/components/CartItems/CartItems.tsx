@@ -4,6 +4,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import AddProductToCart from '~/components/AddProductToCart/AddProductToCart';
 import { CartItem } from '~/models/CartItem';
+import { AvailableProduct } from '~/models/Product';
 import { formatAsPrice, truncateDescription } from '~/utils/utils';
 
 type CartItemsProps = {
@@ -20,23 +21,28 @@ export default function CartItems({ items, isEditable }: CartItemsProps) {
   return (
     <>
       <List disablePadding>
-        {items.map((cartItem: CartItem) => (
-          <ListItem sx={{ padding: (theme) => theme.spacing(1, 0) }} key={cartItem.product.id}>
-            {isEditable && (
-              <div style={{ marginRight: 16 }}>
-                <AddProductToCart product={cartItem.product} />{' '}
-              </div>
-            )}
-            <ListItemText
-              primary={cartItem.product.title}
-              secondary={truncateDescription(cartItem.product.description)}
-            />
-            <Typography variant="body2" sx={{ textWrap: 'nowrap' }}>
-              {formatAsPrice(cartItem.product.price)} x {cartItem.count} ={' '}
-              {formatAsPrice(cartItem.product.price * cartItem.count)}
-            </Typography>
-          </ListItem>
-        ))}
+        {items
+          .sort((item1, item2) => item1.product.title.localeCompare(item2.product.title))
+          .map((cartItem: CartItem) => (
+            <ListItem sx={{ padding: (theme) => theme.spacing(1, 0) }} key={cartItem.product.id}>
+              {isEditable && (
+                <div style={{ marginRight: 16 }}>
+                  <AddProductToCart
+                    product={cartItem.product as AvailableProduct}
+                    showWarning={true}
+                  />{' '}
+                </div>
+              )}
+              <ListItemText
+                primary={cartItem.product.title}
+                secondary={truncateDescription(cartItem.product.description)}
+              />
+              <Typography variant="body2" sx={{ textWrap: 'nowrap' }}>
+                {formatAsPrice(cartItem.product.price)} x {cartItem.count} ={' '}
+                {formatAsPrice(cartItem.product.price * cartItem.count)}
+              </Typography>
+            </ListItem>
+          ))}
         <ListItem sx={{ padding: (theme) => theme.spacing(1, 0) }}>
           <ListItemText primary="Shipping" />
           <Typography variant="body2">Free</Typography>
