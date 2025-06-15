@@ -17,7 +17,7 @@ export function useCart() {
       if (!authTask8) {
         return [];
       }
-      const res = await axios.get<CartItem[]>(`${API_PATHS.cart}/profile/cart`, {
+      const res = await axios.get<CartItem[]>(`${API_PATHS.bff}/cart`, {
         headers: {
           Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
         },
@@ -43,7 +43,7 @@ export function useInvalidateCart() {
 export function useUpsertCart() {
   return useMutation({
     mutationFn: async (values: CartItem) =>
-      axios.put<CartItem[]>(`${API_PATHS.cart}/profile/cart`, values, {
+      axios.put<CartItem[]>(`${API_PATHS.bff}/cart`, values, {
         headers: {
           Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
         },

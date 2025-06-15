@@ -27,28 +27,28 @@ export const handlers = [
   }),
   //----------------------------------------------
   // profile:
-  http.get(`${API_PATHS.cart}/profile/cart`, () => {
+  http.get(`${API_PATHS.bff}/cart`, () => {
     return HttpResponse.json(cart);
   }),
-  http.put(`${API_PATHS.cart}/profile/cart`, () => {
+  http.put(`${API_PATHS.bff}/cart`, () => {
     return HttpResponse.json(null, { status: 200 });
   }),
   // order:
-  http.get(`${API_PATHS.order}/order`, () => {
+  http.get(`${API_PATHS.bff}/cart/order`, () => {
     return HttpResponse.json(orders);
   }),
-  http.put(`${API_PATHS.order}/order`, () => {
+  http.put(`${API_PATHS.bff}/cart/order`, () => {
     return HttpResponse.json(null, { status: 200 });
   }),
   //----------------------------------------------
-  http.get(`${API_PATHS.order}/order/:id`, ({ params }) => {
+  http.get(`${API_PATHS.bff}/cart/order/:id`, ({ params }) => {
     const order = orders.find((o) => o.id === params.id);
     return order ? HttpResponse.json(order) : HttpResponse.json(null, { status: 404 });
   }),
-  http.delete(`${API_PATHS.order}/order/:id`, () => {
+  http.delete(`${API_PATHS.bff}/cart/order/:id`, () => {
     return HttpResponse.json(null, { status: 200 });
   }),
-  http.put(`${API_PATHS.order}/order/:id/status`, () => {
+  http.put(`${API_PATHS.bff}/cart/order/:id/status`, () => {
     return HttpResponse.json(null, { status: 200 });
   }),
 ];
