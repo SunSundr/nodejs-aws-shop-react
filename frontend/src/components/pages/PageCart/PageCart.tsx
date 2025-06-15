@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Popover from '@mui/material/Popover';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
@@ -10,11 +11,11 @@ import AddressForm from '~/components/pages/PageCart/components/AddressForm';
 import ReviewCart from '~/components/pages/PageCart/components/ReviewCart';
 import ReviewOrder from '~/components/pages/PageCart/components/ReviewOrder';
 import PaperLayout from '~/components/PaperLayout/PaperLayout';
-import { Address, AddressSchema, Order } from '~/models/Order';
-import { Product } from '~/models/Product';
+import { Address, AddressSchema, OrderPart } from '~/models/Order';
+import { AvailableProduct, Product } from '~/models/Product';
 import { useCart, useInvalidateCart } from '~/queries/cart';
-import { useSubmitOrder } from '~/queries/orders';
-import { getErrorProduct, useAvailableProducts } from '~/queries/products';
+import { useInvalidateOrders, useSubmitOrder } from '~/queries/orders';
+import { getErrorProduct, useAvailableProducts, useRemoveProductCache } from '~/queries/products';
 
 enum CartStep {
   ReviewCart,
@@ -50,11 +51,15 @@ export default function PageCart() {
   const invalidateCart = useInvalidateCart();
   const [activeStep, setActiveStep] = React.useState<CartStep>(CartStep.ReviewCart);
   const [address, setAddress] = useState<Address>(initialAddressValues);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const open = Boolean(anchorEl);
+  // const id = open ? 'simple-popover' : undefined;
 
   const isCartEmpty = cartData.length === 0;
-
-  //------------------------
   const { data = [], isLoading } = useAvailableProducts();
+  const invalidateOrders = useInvalidateOrders();
+  const removeProductCache = useRemoveProductCache();
 
   const getProductsById = (id: string): Product => {
     return data.find((item) => item.id === id) || getErrorProduct(id);
@@ -70,26 +75,47 @@ export default function PageCart() {
     0,
   );
 
-  //------------------------
-
-  const handleNext = () => {
+  const handleNext = (event?: React.MouseEvent<HTMLButtonElement>) => {
     if (activeStep !== CartStep.ReviewOrder) {
+      if (activeStep === CartStep.ReviewCart && event) {
+        for (const item of updatedData) {
+          if (item.count > (item.product as AvailableProduct).count) {
+            setAnchorEl(event.currentTarget);
+            setTimeout(() => setAnchorEl(null), 1000);
+            return;
+          }
+        }
+      }
       setActiveStep((step) => step + 1);
       return;
     }
-    const values = {
-      items: cartData.map((i) => ({
-        productId: i.product.id,
-        count: i.count,
-      })),
-      address,
-      total: totalPrice,
-    };
 
-    submitOrder(values as Omit<Order, 'id'>, {
+    const values: OrderPart = {
+      items: cartData.map((i) => ({
+        productId: i.product.id!,
+        count: i.count,
+        category: i.product.category!,
+      })),
+      delivery: address,
+      total: totalPrice,
+      cartId: cartData[0].cartId || '',
+    };
+    setIsSubmitting(true);
+
+    submitOrder(values, {
+      onError: (error) => {
+        console.error(error);
+      },
       onSuccess: () => {
         setActiveStep(activeStep + 1);
         invalidateCart();
+        values.items.forEach((item) => {
+          removeProductCache(item.productId);
+        });
+        setTimeout(() => invalidateOrders(), 3000);
+      },
+      onSettled: () => {
+        setIsSubmitting(false);
       },
     });
   };
@@ -133,9 +159,34 @@ export default function PageCart() {
               Back
             </Button>
           )}
-          <Button variant="contained" color="primary" sx={{ mt: 3, ml: 1 }} onClick={handleNext}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3, ml: 1 }}
+            onClick={handleNext}
+            loading={isSubmitting}
+          >
             {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
           </Button>
+
+          <Popover
+            open={open}
+            anchorEl={anchorEl}
+            onClose={() => setAnchorEl(null)}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            sx={{ left: -4, cursor: 'pointer' }}
+          >
+            <Typography color="error" sx={{ p: 1, cursor: 'default' }}>
+              Some products are out of stock!
+            </Typography>
+          </Popover>
         </Box>
       )}
     </PaperLayout>

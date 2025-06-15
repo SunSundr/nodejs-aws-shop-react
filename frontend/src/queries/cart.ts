@@ -1,52 +1,58 @@
 import React from 'react';
-//import { useAuth } from 'react-oidc-context';
+import { useAuth } from 'react-oidc-context';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import API_PATHS from '~/constants/apiPaths';
-import { useAuthTask8 } from '~/models/authTask8';
+import { AuthSyncMessage } from '~/constants/common';
 import { CartItem } from '~/models/CartItem';
+import { authHeaders, sendSyncAuthMessage } from '~/utils/auth';
 
 export function useCart() {
-  // const auth = useAuth();
-  const authTask8 = useAuthTask8();
+  const auth = useAuth();
   return useQuery<CartItem[], AxiosError>({
     queryKey: ['cart'],
     queryFn: async () => {
-      // temp solution
-      // if (!auth.isAuthenticated) {
-      if (!authTask8) {
-        return [];
-      }
-      const res = await axios.get<CartItem[]>(`${API_PATHS.bff}/cart`, {
-        headers: {
-          Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
-        },
+      if (!auth.isAuthenticated) return [];
+      const response = await axios.get<CartItem[]>(`${API_PATHS.cart}/cart`, {
+        headers: authHeaders(auth),
       });
-      return res.data;
+      sendSyncAuthMessage({ type: AuthSyncMessage.cart, data: response.data });
+      return response.data;
     },
   });
 }
 
-export function useCartData() {
-  const queryClient = useQueryClient();
-  return queryClient.getQueryData<CartItem[]>(['cart']);
-}
+// export function useCartData() {
+//   const queryClient = useQueryClient();
+//   return queryClient.getQueryData<CartItem[]>(['cart']);
+// }
 
 export function useInvalidateCart() {
   const queryClient = useQueryClient();
   return React.useCallback(
-    () => queryClient.invalidateQueries({ queryKey: ['cart'], exact: true }),
+    (newData?: CartItem[]) => {
+      if (newData) {
+        queryClient.setQueryData(['cart'], newData);
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['cart'], exact: true });
+      }
+    },
     [queryClient],
   );
 }
 
-export function useUpsertCart() {
+export function useUpdateCart() {
+  const auth = useAuth();
+  const invalidateCart = useInvalidateCart();
+
   return useMutation({
-    mutationFn: async (values: CartItem) =>
-      axios.put<CartItem[]>(`${API_PATHS.bff}/cart`, values, {
-        headers: {
-          Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
-        },
-      }),
+    mutationFn: async (values: CartItem) => {
+      const response = await axios.put<CartItem[]>(`${API_PATHS.cart}/cart`, values, {
+        headers: authHeaders(auth),
+      });
+      invalidateCart(response.data);
+      sendSyncAuthMessage({ type: AuthSyncMessage.cart, data: response.data });
+      return response;
+    },
   });
 }

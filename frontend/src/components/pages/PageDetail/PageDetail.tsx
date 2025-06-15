@@ -1,10 +1,12 @@
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
+import { Box, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import AddProductToCart from '~/components/AddProductToCart/AddProductToCart';
+import { GoBackButton } from '~/components/GoBackButton/GoBackButton';
 import LoadingSpinner from '~/components/LoadingSpinner/LoadingSpinner';
 import ProductImage from '~/components/ProductImage/ProductImage';
-import { getErrorMessage, useAvailableProduct } from '~/queries/products';
+import { useAvailableProduct } from '~/queries/products';
+import { getAxiosErrorMessage } from '~/utils/getAxiosErrorMessage';
 import { formatAsPrice } from '~/utils/utils';
 
 const DetailPage: React.FC = () => {
@@ -15,17 +17,28 @@ const DetailPage: React.FC = () => {
     ? { data: product, isLoading: false, isError: false, error: null }
     : useAvailableProduct(id);
 
-  const goBackButton = (
-    <Button variant="outlined" component={Link} to={'/'} sx={{ mt: 0.5, mb: 1.5 }}>
-      Return to home
-    </Button>
-  );
+  // const goBackButton = (
+  //   <IconButton
+  //     size="medium"
+  //     component={Link}
+  //     to={'/'}
+  //     sx={{
+  //       '&:hover': {
+  //         background: (theme) =>
+  //           theme.palette.mode === 'dark' ? theme.palette.grey[900] : theme.palette.grey[300],
+  //       },
+  //       mb: 0.4,
+  //     }}
+  //   >
+  //     <WestIcon />
+  //   </IconButton>
+  // );
 
   const errorCard = (error: AxiosError | null) => {
     return (
       <Card>
         <Typography variant="h6" color="warning" mb={3} mt={3} sx={{ textAlign: 'center' }}>
-          Error: {getErrorMessage(error) || 'Unknown error'}
+          Error: {getAxiosErrorMessage(error) || 'Unknown error'}
         </Typography>
       </Card>
     );
@@ -34,7 +47,7 @@ const DetailPage: React.FC = () => {
   if (isLoading || isError) {
     return (
       <Box sx={{ maxWidth: 600, margin: 'auto', padding: 2 }}>
-        {goBackButton}
+        <GoBackButton />
         {isLoading && <LoadingSpinner />}
         {isError && errorCard(error)}
       </Box>
@@ -42,7 +55,7 @@ const DetailPage: React.FC = () => {
   } else if (!data) {
     return (
       <Box sx={{ maxWidth: 600, margin: 'auto', padding: 2 }}>
-        {goBackButton}
+        <GoBackButton />
         {errorCard(error)}
       </Box>
     );
@@ -50,7 +63,7 @@ const DetailPage: React.FC = () => {
 
   return (
     <Box sx={{ maxWidth: 800, margin: 'auto', padding: 2 }}>
-      {goBackButton}
+      <GoBackButton />
       <Card>
         <CardMedia
           children={
@@ -62,9 +75,34 @@ const DetailPage: React.FC = () => {
           }
         />
         <CardContent>
-          <Typography variant="h4" component="h1" gutterBottom>
-            {data.title}
-          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'baseline',
+            }}
+          >
+            <Typography variant="h4" component="h1" gutterBottom>
+              {data.title}
+            </Typography>
+            <Typography
+              variant="h6"
+              component="h1"
+              gutterBottom
+              sx={{
+                color: (theme) => {
+                  if (data.count <= 3) return theme.palette.error.light;
+                  if (data.count <= 10) return theme.palette.warning.light;
+                  return theme.palette.info.light;
+                },
+                fontSize: '1rem',
+                fontStyle: 'italic',
+                marginRight: '8px',
+              }}
+            >
+              {data.count > 0 ? `${data.count} left in stock` : 'out of stock'}
+            </Typography>
+          </Box>
           <Typography
             sx={{
               color: 'text.secondary',
@@ -86,6 +124,7 @@ const DetailPage: React.FC = () => {
               fontWeight: 'bold',
               paddingRight: '16px',
               fontSize: '1.1rem',
+              userSelect: 'none',
             }}
           >
             {formatAsPrice(data.price)}

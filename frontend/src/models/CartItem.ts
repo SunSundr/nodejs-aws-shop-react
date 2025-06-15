@@ -1,7 +1,7 @@
-import { Product } from '~/models/Product';
+import { AvailableProduct, Product } from '~/models/Product';
 
 export type CartItem = {
-  product: Product;
+  product: Product | AvailableProduct;
   count: number;
   cartId?: string;
 };

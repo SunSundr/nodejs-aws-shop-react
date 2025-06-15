@@ -1,3 +1,4 @@
+import { RESERVED_ID_PREFIX } from '~/constants/common';
 import { AvailableProduct } from '~/models/Product';
 
 const priceFormatter = new Intl.NumberFormat('en-US', {
@@ -8,11 +9,28 @@ const priceFormatter = new Intl.NumberFormat('en-US', {
 export const formatAsPrice = (price: number) => priceFormatter.format(price);
 
 export function sortProductsById(products: AvailableProduct[]): AvailableProduct[] {
-  return products.sort((a, b) => {
-    if (a.id === undefined) return 1;
-    if (b.id === undefined) return -1;
-    return a.id.localeCompare(b.id);
-  });
+  const reservedProducts: AvailableProduct[] = [];
+  const restProducts: AvailableProduct[] = [];
+  const sortById = (prods: AvailableProduct[]) => {
+    return prods.sort((a, b) => {
+      if (a.id === undefined) return 1;
+      if (b.id === undefined) return -1;
+      return a.id.localeCompare(b.id);
+    });
+  };
+  const sortByTitle = (prods: AvailableProduct[]) => {
+    return prods.sort((a, b) => {
+      return a.title.localeCompare(b.title);
+    });
+  };
+
+  products.forEach((product) =>
+    product.id?.startsWith(RESERVED_ID_PREFIX)
+      ? reservedProducts.push(product)
+      : restProducts.push(product),
+  );
+
+  return [...sortById(reservedProducts), ...sortByTitle(restProducts)];
 }
 
 export function formatLastSpace(text: string): string {

@@ -28,10 +28,10 @@ test('Renders products list', async () => {
     },
   ];
   server.use(
-    http.get(`${API_PATHS.bff}/products`, () => {
+    http.get(`${API_PATHS.product}/products`, () => {
       return HttpResponse.json(products, { status: 200 });
     }),
-    http.get(`${API_PATHS.bff}/cart`, () => {
+    http.get(`${API_PATHS.cart}/cart`, () => {
       return HttpResponse.json<CartItem[]>([], { status: 200 });
     }),
   );

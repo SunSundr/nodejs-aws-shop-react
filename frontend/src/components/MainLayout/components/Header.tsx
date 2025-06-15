@@ -8,7 +8,10 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
+import NoAccountsIcon from '@mui/icons-material/NoAccounts';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import RuleIcon from '@mui/icons-material/Rule';
 import AppBar from '@mui/material/AppBar';
@@ -24,9 +27,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Cart from '~/components/MainLayout/components/Cart';
-import { LOGOUT_URL } from '~/constants/apiPaths';
-import { STORE_NAME } from '~/constants/common';
-import { useAuthTask8 } from '~/models/authTask8';
+import { COGNITO_DOMAIN } from '~/constants/apiPaths';
+import { LOGOUT_USER_MARK, NEW_USER_MARK, STORE_NAME } from '~/constants/common';
 import emojiLogin from '~/utils/emoji';
 
 type HeaderProps = {
@@ -42,46 +44,25 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
   const auth = useAuth();
   const isLogin = auth.isAuthenticated;
   const isAdmin = isLogin && (auth.user?.profile['custom:admin'] as boolean);
-
-  const userNameTask8 = localStorage.getItem('sunsundr_store_username');
+  const userName = isLogin
+    ? `${auth.user?.profile?.given_name} ${auth.user?.profile?.family_name}`
+    : null;
 
   const truncateString = (str: string, limit = 50) => {
     return str.length > limit ? str.slice(0, limit) + '...' : str;
   };
 
-  const menuPartTask8 = () => {
-    const isLoginTask8 = useAuthTask8();
-    return isLoginTask8 ? (
-      <MenuItem
-        onClick={() => {
-          localStorage.removeItem('authorization_token');
-          localStorage.removeItem('sunsundr_store_username');
-          handleAuthMenuClose();
-          setTimeout(() => {
-            window.location.href = window.location.origin;
-          }, 100);
-        }}
-      >
-        <ListItemIcon>
-          <LogoutIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText>Logout (Task 8|9)</ListItemText>
-      </MenuItem>
-    ) : (
-      <MenuItem component={RouterLink} to="/signin" onClick={() => handleAuthMenuClose()}>
-        <ListItemIcon>
-          <LoginIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText>Login (Task 8|9)</ListItemText>
-      </MenuItem>
-    );
-  };
-
   const signOutRedirect = () => {
+    sessionStorage.setItem(LOGOUT_USER_MARK, 'true');
     setTimeout(() => {
-      // auth.removeUser();
-      localStorage.setItem('removeUser', 'true');
-      window.location.href = LOGOUT_URL;
+      // window.location.href = LOGOUT_URL;
+      // https://github.com/authts/react-oidc-context/issues/1206
+      auth.signoutRedirect({
+        extraQueryParams: {
+          client_id: auth.settings.client_id,
+          logout_uri: auth.settings.post_logout_redirect_uri!,
+        },
+      });
     }, 0);
   };
 
@@ -91,7 +72,7 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
   return (
     <AppBar position="relative">
       <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+        <Typography variant="h6">
           <Link
             component={RouterLink}
             sx={{ color: 'inherit', textShadow: '1px 1px rgb(29, 29, 29)' }}
@@ -102,8 +83,8 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
           </Link>
         </Typography>
 
-        <Typography sx={{ flexGrow: 1 }}>
-          {userNameTask8 && truncateString(`${emoji}\u00A0Hello,\u00A0${userNameTask8}!`)}
+        <Typography sx={{ flexGrow: 1, textAlign: 'center', ml: 1.8, mr: 1 }}>
+          {userName && truncateString(`${emoji}\u00A0Hello,\u00A0${userName}!`)}
         </Typography>
 
         <div>
@@ -175,7 +156,11 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
 
         <div>
           <Tooltip
-            title={isLogin ? `${isAdmin ? 'Admin' : 'User'}: ${auth.user?.profile.email}` : 'User'}
+            title={
+              <span style={{ whiteSpace: 'pre-wrap' }}>
+                {isLogin ? `${userName}\n${auth.user?.profile.email}` : 'Login menu'}
+              </span>
+            }
           >
             <IconButton
               aria-label="account of current user"
@@ -185,7 +170,7 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
               color="inherit"
               size="large"
             >
-              <AccountCircle />
+              {isLogin ? <AccountCircle /> : <NoAccountsIcon />}
             </IconButton>
           </Tooltip>
           <Menu
@@ -235,18 +220,65 @@ export default function Header({ themeSwitch, isDarkMode }: HeaderProps) {
                   </ListItemIcon>
                   <ListItemText>Sign Out</ListItemText>
                 </MenuItem>
-                {menuPartTask8()}
+                <MenuItem
+                  component={RouterLink}
+                  to="/profile"
+                  onClick={() => {
+                    setTimeout(() => handleAuthMenuClose(), 200);
+                  }}
+                >
+                  <ListItemIcon>
+                    <ManageAccountsIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Profile</ListItemText>
+                </MenuItem>
               </MenuList>
             ) : (
               <MenuList sx={{ padding: 0 }}>
-                <MenuItem onClick={() => auth.signinRedirect()}>
+                <MenuItem
+                  onClick={() => {
+                    // localStorage.setItem(NEW_USER_MARK, 'false');
+                    sessionStorage.setItem(NEW_USER_MARK, 'false');
+                    auth.signinRedirect();
+                  }}
+                >
                   <ListItemIcon>
                     <LoginIcon fontSize="small" />
                   </ListItemIcon>
                   <ListItemText>Sign in</ListItemText>
                 </MenuItem>
-                {/* temporary solution (task 8) */}
-                {menuPartTask8()}
+                <MenuItem
+                  onClick={() => {
+                    // auth.signinRedirect({
+                    //   extraQueryParams: {
+                    //     //   client_id: auth.settings.client_id,
+                    //     //   prompt: 'signup',
+                    //     // prompt: 'signup',
+                    //     // prompt: 'none',
+                    //     // client_id: auth.settings.client_id,
+                    //     // response_type: 'code',
+                    //     // scope: auth.settings.scope || 'openid profile email',
+                    //     // redirect_uri: auth.settings.redirect_uri,
+                    //   },
+                    // });
+                    // auth.startSilentRenew();
+
+                    sessionStorage.setItem(NEW_USER_MARK, 'true');
+                    const cognitoParams = new URLSearchParams({
+                      client_id: auth.settings.client_id,
+                      response_type: 'code',
+                      scope: auth.settings.scope || 'openid profile email',
+                      redirect_uri: auth.settings.redirect_uri,
+                    });
+
+                    window.location.href = `${COGNITO_DOMAIN}/signup?${cognitoParams.toString()}`;
+                  }}
+                >
+                  <ListItemIcon>
+                    <PersonAddIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Sign up</ListItemText>
+                </MenuItem>
               </MenuList>
             )}
           </Menu>

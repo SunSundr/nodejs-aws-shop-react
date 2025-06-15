@@ -26,6 +26,7 @@ export default tseslint.config(
         'error',
         { ignoreRestSiblings: true, argsIgnorePattern: '^_' },
       ],
+      '@typescript-eslint/no-unused-expressions': ['error', { allowTernary: true }],
       'react/jsx-uses-react': 'off',
       'react/react-in-jsx-scope': 'off',
       'sort-imports': [

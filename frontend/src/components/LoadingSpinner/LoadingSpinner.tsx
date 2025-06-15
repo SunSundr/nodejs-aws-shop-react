@@ -17,7 +17,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: `calc(100vh - ${offset}px)`,
+        ...(offset ? { minHeight: `calc(100vh - ${offset}px)` } : {}),
       }}
     >
       <CircularProgress

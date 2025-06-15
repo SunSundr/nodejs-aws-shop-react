@@ -19,7 +19,8 @@ import API_PATHS from '~/constants/apiPaths';
 import { Subscription, SubscriptionsSchema } from '~/models/Product';
 
 export default function PageSubscribe() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // TODO Link
+  // <Button color="primary" variant="contained" component={Link} to="/" sx={{ mt: 3 }}></Button>
   const inttialValues: Subscription = {
     email: '',
     filterType: 'none',
@@ -34,7 +35,7 @@ export default function PageSubscribe() {
 
   const onSubmit = (values: Subscription) => {
     setIsLoading(true);
-    fetch(`${API_PATHS.bff}/products/subscribe`, {
+    fetch(`${API_PATHS.product}/products/subscribe`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,7 +65,7 @@ export default function PageSubscribe() {
 
   const title = (
     <Typography component="h1" variant="h4" align="center" mb={2}>
-      Subscribe to new products
+      Subscribe to New Products
     </Typography>
   );
   const cancelButton = (
@@ -195,7 +196,7 @@ export default function PageSubscribe() {
                 <Grid
                   container
                   size={{ xs: 12 }}
-                  justifyContent="space-between"
+                  justifyContent="flex-end"
                   style={{ marginTop: '16px' }}
                 >
                   {cancelButton}

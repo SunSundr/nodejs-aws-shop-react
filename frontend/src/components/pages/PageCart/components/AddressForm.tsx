@@ -1,3 +1,4 @@
+import { useAuth } from 'react-oidc-context';
 import { Field, Form, Formik } from 'formik';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,6 +14,10 @@ type AddressFormProps = {
 };
 
 const AddressForm = ({ initialValues, onBack, onSubmit }: AddressFormProps) => {
+  const auth = useAuth();
+  initialValues.firstName = auth.user?.profile.given_name || '';
+  initialValues.lastName = auth.user?.profile.family_name || '';
+  initialValues.address = (auth.user?.profile['custom:shipping'] as string | undefined) || '';
   return (
     <Formik
       initialValues={initialValues}
@@ -26,10 +31,10 @@ const AddressForm = ({ initialValues, onBack, onSubmit }: AddressFormProps) => {
         </Typography>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <Field component={TextField} name="lastName" label="Last Name" fullWidth />
+            <Field component={TextField} name="firstName" label="First Name" fullWidth />
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <Field component={TextField} name="firstName" label="First Name" fullWidth />
+            <Field component={TextField} name="lastName" label="Last Name" fullWidth />
           </Grid>
           <Grid size={{ xs: 12 }}>
             <Field
